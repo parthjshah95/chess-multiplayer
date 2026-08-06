@@ -1,0 +1,9 @@
+{
+  "name": "chess-multiplayer",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@vercel/blob": "^1.0.0",
+    "chess.js": "1.4.0"
+  }
+}

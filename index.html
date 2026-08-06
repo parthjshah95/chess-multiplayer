@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chess with a Friend</title>
+<meta name="description" content="Peer-to-peer chess. Copy a link, send it to a friend, play.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♞</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1><span class="knight">♞</span> Chess with a Friend</h1>
+  <span id="conn" class="chip" data-state="waiting">connecting…</span>
+</header>
+
+<main>
+  <section id="sharecard" hidden>
+    <p class="share-title">Invite your opponent</p>
+    <p class="share-sub">Send this link to a friend — when they open it, the game begins.</p>
+    <div class="linkrow">
+      <input id="link" readonly spellcheck="false" aria-label="invite link">
+      <button id="copy" class="btn gold">Copy link</button>
+    </div>
+  </section>
+
+  <div id="layout">
+    <div id="board" aria-label="chess board"></div>
+
+    <aside id="panel">
+      <p id="role" hidden></p>
+      <div id="status" role="status">Setting up…</div>
+      <p id="substatus"></p>
+      <ol id="moves" aria-label="move list"></ol>
+      <div class="actions">
+        <button id="resign" class="btn danger" hidden>Resign</button>
+        <button id="rematch" class="btn gold" hidden>Rematch</button>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<div id="promo" hidden>
+  <div class="promo-card">
+    <p>Promote your pawn</p>
+    <div id="promo-buttons"></div>
+  </div>
+</div>
+
+<footer>Games are saved on the server — refresh or come back later and pick up where you left off.</footer>
+
+<script type="module" src="app.js?v=2"></script>
+</body>
+</html>
