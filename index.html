@@ -29,7 +29,11 @@
   </section>
 
   <div id="layout">
-    <div id="board" aria-label="chess board"></div>
+    <div id="boardwrap">
+      <div id="fallen-top" class="tray"></div>
+      <div id="board" aria-label="chess board"></div>
+      <div id="fallen-bottom" class="tray"></div>
+    </div>
 
     <aside id="panel">
       <p id="role" hidden></p>
@@ -54,6 +58,6 @@
 
 <footer>Games are saved on the server — refresh or come back later and pick up where you left off.</footer>
 
-<script type="module" src="app.js?v=3"></script>
+<script type="module" src="app.js?v=4"></script>
 </body>
 </html>
