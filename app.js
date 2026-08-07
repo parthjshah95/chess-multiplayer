@@ -5,9 +5,11 @@ const boardEl = $("board"), statusEl = $("status"), subStatusEl = $("substatus")
   shareCard = $("sharecard"), linkInput = $("link"), copyBtn = $("copy"),
   movesEl = $("moves"), resignBtn = $("resign"), rematchBtn = $("rematch"),
   connChip = $("conn"), promoEl = $("promo"), promoButtons = $("promo-buttons"),
-  roleEl = $("role"), notifyBtn = $("notify");
+  roleEl = $("role"), notifyBtn = $("notify"),
+  fallenTopEl = $("fallen-top"), fallenBottomEl = $("fallen-bottom");
 
 const GLYPH = { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" };
+const FALLEN_ORDER = ["p", "n", "b", "r", "q"]; // cheapest first, so like pieces group up
 const TEXT = "\uFE0E"; // variation selector: force text (non-emoji) glyph rendering
 const FILES = "abcdefgh";
 
@@ -161,6 +163,7 @@ function syncUi() {
   syncNotifyUi();
   render();
   renderMoves();
+  renderFallen();
 }
 
 function updateStatus() {
@@ -266,6 +269,7 @@ async function makeMove(from, to, promotion) {
   blip(mv.captured ? 220 : 440);
   render();
   renderMoves();
+  renderFallen();
   setStatus("Waiting for your opponent", "");
   posting = true;
   try {
@@ -350,6 +354,31 @@ function findKing(color) {
     }
   }
   return null;
+}
+
+// Each side's losses sit along its own edge of the board, so they follow the
+// flip: whoever is at the top of the board gets the top tray.
+function renderFallen() {
+  // Replaying the moves is exact where counting the board isn't — a promoted
+  // pawn leaves the board without ever having been captured.
+  const fallen = { w: [], b: [] };
+  for (const mv of chess.history({ verbose: true })) {
+    if (mv.captured) fallen[mv.color === "w" ? "b" : "w"].push(mv.captured);
+  }
+  const flipped = you === "b";
+  fillTray(fallenTopEl, flipped ? "w" : "b", fallen);
+  fillTray(fallenBottomEl, flipped ? "b" : "w", fallen);
+}
+
+function fillTray(el, color, fallen) {
+  el.setAttribute("aria-label", `${color === "w" ? "White" : "Black"} pieces captured`);
+  el.innerHTML = "";
+  for (const type of fallen[color].sort((a, b) => FALLEN_ORDER.indexOf(a) - FALLEN_ORDER.indexOf(b))) {
+    const span = document.createElement("span");
+    span.className = `fallen ${color}`;
+    span.textContent = GLYPH[type] + TEXT;
+    el.appendChild(span);
+  }
 }
 
 function renderMoves() {
