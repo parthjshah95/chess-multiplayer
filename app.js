@@ -5,7 +5,7 @@ const boardEl = $("board"), statusEl = $("status"), subStatusEl = $("substatus")
   shareCard = $("sharecard"), linkInput = $("link"), copyBtn = $("copy"),
   movesEl = $("moves"), resignBtn = $("resign"), rematchBtn = $("rematch"),
   connChip = $("conn"), promoEl = $("promo"), promoButtons = $("promo-buttons"),
-  roleEl = $("role");
+  roleEl = $("role"), notifyBtn = $("notify");
 
 const GLYPH = { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" };
 const TEXT = "\uFE0E"; // variation selector: force text (non-emoji) glyph rendering
@@ -125,6 +125,11 @@ function applyState(next) {
 
   const opponentMoved = prev && next.v > prev.v && next.moves.length > prev.moves.length && next.turn === you;
   if (opponentMoved) blip(next.lastMove?.captured ? 220 : 440);
+  // The board came round to you: they moved, or the game just started (or a
+  // rematch began) with you up first. Never on the first apply — you're right here.
+  const becameYourTurn = prev && you && next.status === "active" && next.turn === you
+    && (next.moves.length > prev.moves.length || prev.status !== "active");
+  if (becameYourTurn) notifyTurn();
   if (prev && prev.status === "over" && next.status === "active") disarmResign(); // rematch started
 
   clearSelection();
@@ -153,6 +158,7 @@ function syncUi() {
   }
 
   updateStatus();
+  syncNotifyUi();
   render();
   renderMoves();
 }
@@ -214,8 +220,11 @@ async function poll() {
 }
 
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && state) schedulePoll(true);
+  if (document.hidden) return;
+  dismissNotifications(); // you're looking at the board — the alert has done its job
+  if (state) schedulePoll(true);
 });
+window.addEventListener("focus", dismissNotifications);
 
 // ── board interaction ───────────────────────────────────────────────
 boardEl.addEventListener("click", (e) => {
@@ -395,6 +404,81 @@ rematchBtn.addEventListener("click", async () => {
   try { applyState((await api({ action: "rematch", id: state.id, key: myKey })).state); }
   catch { schedulePoll(true); }
 });
+
+// ── turn notifications ──────────────────────────────────────────────
+// Fired locally off the poll loop — there is no push server, so the tab has to
+// stay open (backgrounded is fine) for an alert to land.
+const NOTIFY_PREF = "chess-notify";
+const NOTIFY_TAG = "chess-turn"; // one tag: a new alert replaces the stale one
+const notifySupported = typeof Notification !== "undefined" && window.isSecureContext;
+// Permission can be revoked in browser settings long after the pref was saved.
+let notifyOn = notifySupported && localStorage.getItem(NOTIFY_PREF) === "on"
+  && Notification.permission === "granted";
+let swReg = null;
+let liveNote = null; // constructor-path handle, so coming back to the tab can dismiss it
+
+// Android has no Notification constructor; there they must come from a service
+// worker registration. Wait for `ready` so the worker is active before we use it.
+if (notifySupported && "serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js")
+    .then(() => navigator.serviceWorker.ready)
+    .then((reg) => { swReg = reg; }, () => { /* fall back to the constructor */ });
+}
+
+const pageInView = () => !document.hidden && document.hasFocus();
+
+function syncNotifyUi() {
+  notifyBtn.hidden = !notifySupported || !you;
+  if (notifyBtn.hidden) return;
+  const blocked = Notification.permission === "denied";
+  notifyBtn.disabled = blocked;
+  notifyBtn.setAttribute("aria-pressed", String(notifyOn && !blocked));
+  notifyBtn.textContent = blocked ? "Turn alerts blocked by your browser"
+    : notifyOn ? "Turn alerts on" : "Notify me when it's my turn";
+}
+
+notifyBtn.addEventListener("click", async () => {
+  if (notifyOn) return setNotify(false);
+  let permission = Notification.permission;
+  if (permission === "default") {
+    try { permission = await Notification.requestPermission(); }
+    catch { /* older callback-only API resolves to undefined */ }
+    permission ||= Notification.permission;
+  }
+  setNotify(permission === "granted");
+  if (permission === "granted") notify("Turn alerts on", "This is what you'll see when it's your move.");
+});
+
+function setNotify(on) {
+  notifyOn = on;
+  localStorage.setItem(NOTIFY_PREF, on ? "on" : "off");
+  if (!on) dismissNotifications();
+  syncNotifyUi();
+}
+
+function notifyTurn() {
+  if (!notifyOn || pageInView()) return; // no point pinging someone who's watching
+  const san = chess.history().at(-1);
+  const check = chess.inCheck() ? " You're in check." : "";
+  notify("Your move", (san ? `They played ${san}.` : "The game has started.") + check);
+}
+
+async function notify(title, body) {
+  const options = { body, tag: NOTIFY_TAG, renotify: true, data: { url: location.href } };
+  try {
+    if (swReg) return await swReg.showNotification(title, options);
+    liveNote = new Notification(title, options);
+    liveNote.onclick = () => { window.focus(); liveNote?.close(); };
+  } catch { /* alerts are a nicety — never break the game over one */ }
+}
+
+async function dismissNotifications() {
+  try {
+    liveNote?.close();
+    liveNote = null;
+    for (const note of (await swReg?.getNotifications({ tag: NOTIFY_TAG })) || []) note.close();
+  } catch { /* nothing to dismiss */ }
+}
 
 // ── move sound ──────────────────────────────────────────────────────
 let audioCtx = null;
