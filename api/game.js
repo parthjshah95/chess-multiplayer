@@ -13,6 +13,7 @@ const PROMOS = new Set(["q", "r", "b", "n"]);
 const sha = (s) => createHash("sha256").update(s).digest("hex");
 const other = (c) => (c === "w" ? "b" : "w");
 const versionPath = (id, v) => `games/${id}/v${String(v).padStart(6, "0")}.json`;
+export const versionOf = (pathname) => Number(pathname.split("/").pop().slice(1, -5));
 
 function replay(doc) {
   const chess = new Chess(doc.startFen || undefined);
@@ -20,7 +21,7 @@ function replay(doc) {
   return chess;
 }
 
-async function latestDoc(id) {
+async function latestBlob(id) {
   let cursor;
   let newest = null;
   do {
@@ -30,10 +31,21 @@ async function latestDoc(id) {
     }
     cursor = page.hasMore ? page.cursor : undefined;
   } while (cursor);
-  if (!newest) return null;
-  const res = await fetch(newest.url, { cache: "no-store" });
+  return newest;
+}
+
+// Every version lives at its own path and is never overwritten, so each URL is
+// immutable and safe to serve from cache. Forcing an origin read here (the old
+// `cache: "no-store"`) got the whole store rate-limited into 403s under polling.
+async function readDoc(blob) {
+  const res = await fetch(blob.url);
   if (!res.ok) throw new Error(`blob fetch failed: ${res.status}`);
   return res.json();
+}
+
+async function latestDoc(id) {
+  const newest = await latestBlob(id);
+  return newest ? readDoc(newest) : null;
 }
 
 async function writeDoc(doc) {
@@ -92,11 +104,14 @@ export default async function handler(req, res) {
   res.setHeader("cache-control", "no-store");
   try {
     if (req.method === "GET") {
-      const { id, key } = req.query;
+      const { id, key, since } = req.query;
       if (!ID_RE.test(id || "")) return res.status(400).json({ error: "bad id" });
-      const doc = await latestDoc(id);
-      if (!doc) return res.status(404).json({ error: "game not found" });
-      return res.status(200).json({ state: publicState(doc, key) });
+      const newest = await latestBlob(id);
+      if (!newest) return res.status(404).json({ error: "game not found" });
+      // The pathname already carries the version, so an idle poll needs no body read.
+      const v = versionOf(newest.pathname);
+      if (Number(since) === v) return res.status(200).json({ unchanged: true, v });
+      return res.status(200).json({ state: publicState(await readDoc(newest), key) });
     }
     if (req.method !== "POST") return res.status(405).json({ error: "method not allowed" });
 

@@ -54,8 +54,12 @@ async function api(payload) {
   return data;
 }
 
-async function fetchState(id) {
-  const query = `id=${encodeURIComponent(id)}` + (myKey ? `&key=${encodeURIComponent(myKey)}` : "");
+// Pass `since` on idle polls so the server can answer from the version number
+// alone; returns null when nothing has changed.
+async function fetchState(id, since) {
+  const query = `id=${encodeURIComponent(id)}`
+    + (myKey ? `&key=${encodeURIComponent(myKey)}` : "")
+    + (since != null ? `&since=${since}` : "");
   const res = await fetch(`/api/game?${query}`, { cache: "no-store" });
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
@@ -63,7 +67,7 @@ async function fetchState(id) {
     err.status = res.status;
     throw err;
   }
-  return data.state;
+  return data.unchanged ? null : data.state;
 }
 
 // ── boot ────────────────────────────────────────────────────────────
@@ -198,9 +202,9 @@ function schedulePoll(immediate) {
 async function poll() {
   if (posting) return schedulePoll();
   try {
-    const next = await fetchState(state.id);
+    const next = await fetchState(state.id, state.v);
     failStreak = 0;
-    if (next.v > state.v) applyState(next);
+    if (next && next.v > state.v) applyState(next);
     else syncUi();
   } catch {
     failStreak++;
