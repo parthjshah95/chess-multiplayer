@@ -1,8 +1,10 @@
 // node test.js
 import assert from "node:assert/strict";
+import { readFileSync, readdirSync } from "node:fs";
 import { Chess } from "chess.js";
 import { versionOf } from "./api/game.js";
 import { gameRecord } from "./api/recorder.js";
+import { normalize } from "./tutorials.js";
 
 // versionOf must invert versionPath(id, v) = games/<id>/v<6-digit>.json
 assert.equal(versionOf("games/abc/v000001.json"), 1);
@@ -72,4 +74,62 @@ assert.equal(legacy.whiteName, null);
 assert.equal(legacy.blackName, null);
 assert.ok(legacy.pgn.includes('[White "White"]'), "anonymous game keeps default White header");
 
-console.log("ok");
+// ── schema, defined in two places ───────────────────────────────────
+// ensureSchema() in api/recorder.js creates the table at runtime; db/schema.sql
+// documents it for anyone provisioning ahead of time. Two copies of one truth
+// drift silently, and because the app auto-creates the table, a stale
+// schema.sql would only surface as a failed INSERT in production.
+const sqlText = (path) => readFileSync(new URL(path, import.meta.url), "utf8")
+  .replace(/--[^\n]*/g, " ").replace(/\s+/g, " ");
+const columnsOf = (text) => {
+  const body = text.slice(text.search(/CREATE TABLE IF NOT EXISTS games/i), text.search(/PRIMARY KEY/i));
+  return [...body.matchAll(/(\w+)\s+(TEXT|INTEGER|JSONB|TIMESTAMPTZ|BIGINT)\b/gi)]
+    .map(([, name, type]) => `${name.toLowerCase()} ${type.toUpperCase()}`);
+};
+const indexesOf = (text) =>
+  [...text.matchAll(/CREATE INDEX IF NOT EXISTS (\w+) ON games \((\w+)\)/gi)]
+    .map(([, name, col]) => `${name}(${col})`).sort();
+
+const fromFile = sqlText("./db/schema.sql");
+const fromCode = sqlText("./api/recorder.js");
+assert.ok(columnsOf(fromFile).length >= 10, "db/schema.sql: no columns parsed — did the DDL move?");
+assert.deepEqual(columnsOf(fromCode), columnsOf(fromFile),
+  "api/recorder.js and db/schema.sql disagree about the games table columns");
+assert.deepEqual(indexesOf(fromCode), indexesOf(fromFile),
+  "api/recorder.js and db/schema.sql disagree about the games table indexes");
+
+// ── tutorial content ────────────────────────────────────────────────
+// normalize() replays every move through chess.js, so an illegal or mistyped
+// line fails here rather than rendering a wrong position to a reader.
+const read = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), "utf8"));
+const index = read("./tutorials/index.json");
+assert.ok(Array.isArray(index) && index.length, "tutorials/index.json lists no studies");
+
+for (const entry of index) {
+  const where = `tutorials/${entry.slug}.json`;
+  assert.match(entry.slug || "", /^[a-z0-9][a-z0-9-]*$/, `bad slug: ${entry.slug}`);
+  for (const field of ["title", "blurb"]) assert.ok(entry[field], `${entry.slug}: index entry needs ${field}`);
+
+  const doc = read(`./tutorials/${entry.slug}.json`);
+  assert.equal(doc.slug, entry.slug, `${where}: slug disagrees with the index`);
+  assert.ok(doc.title && doc.standfirst, `${where}: needs a title and a standfirst`);
+
+  const { steps } = normalize(doc);
+  assert.ok(steps.length >= 2, `${where}: a study needs at least two positions`);
+  steps.forEach((step, i) => {
+    assert.ok(step.title, `${where}: step ${i} has no title`);
+    assert.ok(step.body.length, `${where}: step ${i} has no body`);
+    assert.match(step.fen, /^[1-8pnbrqkPNBRQK/]+ [wb] /, `${where}: step ${i} produced a bad FEN`);
+  });
+  // the first step is the position you start from, so it never carries a move
+  assert.equal(steps[0].san, null, `${where}: the first step should be a position, not a move`);
+}
+
+// every tutorial file must be reachable from the index
+const listed = new Set(index.map((e) => `${e.slug}.json`));
+for (const file of readdirSync(new URL("./tutorials/", import.meta.url))) {
+  if (file === "index.json") continue;
+  assert.ok(listed.has(file), `tutorials/${file} is not listed in index.json`);
+}
+
+console.log(`ok — versions, game records, ${index.length} tutorial(s)`);

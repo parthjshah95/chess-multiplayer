@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opening study — Chess with a Friend</title>
+<meta name="description" content="Step through a chess opening one move at a time, with the idea behind each move.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♞</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="learn.css">
+</head>
+<body>
+
+<header>
+  <h1><span class="knight">♞</span> <a href="learn.html">Openings</a></h1>
+  <a class="masthead-link" href="index.html">Play a game →</a>
+</header>
+
+<main>
+  <section class="intro">
+    <p class="eyebrow" id="eyebrow"></p>
+    <h2 id="title">Loading…</h2>
+    <p class="standfirst" id="standfirst"></p>
+  </section>
+
+  <div class="study" id="study" hidden>
+    <div id="boardwrap">
+      <div id="board" class="board" role="img" aria-label="Chess position"></div>
+      <button id="fen" class="fen" title="Copy this position's FEN">
+        <span id="fen-label">FEN</span><code id="fen-text"></code>
+      </button>
+    </div>
+
+    <section class="note">
+      <div class="note-head">
+        <span class="ply" id="ply"></span>
+        <span class="tag" id="tag"></span>
+      </div>
+      <h3 id="step-title"></h3>
+      <div id="body"></div>
+      <div class="controls">
+        <button class="btn ghost" id="prev">← Back</button>
+        <button class="btn gold" id="next">Next →</button>
+        <span class="counter" id="counter"></span>
+      </div>
+    </section>
+  </div>
+
+  <section class="score" id="score" hidden>
+    <p class="eyebrow">The score — jump anywhere</p>
+    <div class="ribbon" id="ribbon"></div>
+  </section>
+</main>
+
+<footer>Every position is a real FEN — copy one and open it in the game with <code>#fen=…</code> to play on from there.</footer>
+
+<script type="module" src="tutorial.js?v=1"></script>
+</body>
+</html>

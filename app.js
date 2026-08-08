@@ -1,4 +1,5 @@
 import { Chess } from "./vendor/chess.js";
+import { GLYPH, TEXT, renderBoard, findKing, fallenPieces, renderTray } from "./board.js";
 
 const $ = (id) => document.getElementById(id);
 const boardEl = $("board"), statusEl = $("status"), subStatusEl = $("substatus"),
@@ -8,11 +9,6 @@ const boardEl = $("board"), statusEl = $("status"), subStatusEl = $("substatus")
   roleEl = $("role"), notifyBtn = $("notify"),
   nameInput = $("playername"), playersEl = $("players"),
   fallenTopEl = $("fallen-top"), fallenBottomEl = $("fallen-bottom");
-
-const GLYPH = { k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟" };
-const FALLEN_ORDER = ["p", "n", "b", "r", "q"]; // cheapest first, so like pieces group up
-const TEXT = "\uFE0E"; // variation selector: force text (non-emoji) glyph rendering
-const FILES = "abcdefgh";
 
 // ── url / identity ──────────────────────────────────────────────────
 const params = new URLSearchParams(location.hash.slice(1));
@@ -359,81 +355,44 @@ promoEl.addEventListener("click", (e) => {
 });
 
 // ── rendering ───────────────────────────────────────────────────────
+// The board and the trays are drawn by the shared component in board.js, which
+// the tutorials use too; everything here just turns game state into its options.
 function render() {
-  const flipped = you === "b";
-  const kingSq = chess.inCheck() ? findKing(chess.turn()) : null;
-  const interactive = state && state.status === "active" && you && chess.turn() === you && !posting;
-  boardEl.innerHTML = "";
-  for (let row = 0; row < 8; row++) {
-    for (let col = 0; col < 8; col++) {
-      const fileIdx = flipped ? 7 - col : col;
-      const rankIdx = flipped ? row : 7 - row;
-      const sq = FILES[fileIdx] + (rankIdx + 1);
-      const cell = document.createElement("div");
-      cell.dataset.square = sq;
-      cell.className = "square " + ((fileIdx + rankIdx) % 2 === 0 ? "dark" : "light");
-      if (row === 7) cell.dataset.file = FILES[fileIdx];
-      if (col === 0) cell.dataset.rank = String(rankIdx + 1);
-      if (lastMove && sq === lastMove.from) cell.classList.add("last");
-      if (lastMove && sq === lastMove.to) cell.classList.add("last-to");
-      if (sq === selected) cell.classList.add("selected");
-      if (sq === kingSq) cell.classList.add("check");
-      const targets = legalTargets.filter((m) => m.to === sq);
-      if (targets.length) cell.classList.add(targets.some((m) => m.captured) ? "capture-hint" : "hint");
-      const piece = chess.get(sq);
-      if (piece) {
-        const span = document.createElement("span");
-        span.className = `piece ${piece.color}`;
-        span.textContent = GLYPH[piece.type] + TEXT;
-        if (lastMove && sq === lastMove.to) span.classList.add("just-moved");
-        if (interactive && piece.color === you) span.classList.add("mine");
-        cell.appendChild(span);
-      }
-      boardEl.appendChild(cell);
-    }
-  }
-}
-
-function findKing(color) {
-  const rows = chess.board();
-  for (let r = 0; r < 8; r++) {
-    for (let c = 0; c < 8; c++) {
-      const p = rows[r][c];
-      if (p && p.type === "k" && p.color === color) return FILES[c] + (8 - r);
-    }
-  }
-  return null;
+  renderBoard(boardEl, {
+    chess,
+    flipped: you === "b",
+    lastMove,
+    selected,
+    targets: legalTargets,
+    checkSquare: chess.inCheck() ? findKing(chess, chess.turn()) : null,
+    interactiveFor: state && state.status === "active" && chess.turn() === you && !posting ? you : null,
+  });
 }
 
 // Each side's losses sit along its own edge of the board, so they follow the
 // flip: whoever is at the top of the board gets the top tray.
 function renderFallen() {
-  // Replaying the moves is exact where counting the board isn't — a promoted
-  // pawn leaves the board without ever having been captured.
-  const fallen = { w: [], b: [] };
-  for (const mv of chess.history({ verbose: true })) {
-    if (mv.captured) fallen[mv.color === "w" ? "b" : "w"].push(mv.captured);
-  }
-  // Hold a piece that's mid-flight out of its tray, so it lands into the drawer
-  // at the end of the animation instead of popping in when the flight starts.
+  const fallen = fallenPieces(chess);
+  // Hold a piece that's mid-flight out of its tray, so it lands in at the end of
+  // the animation instead of popping in when the flight starts.
   if (flyingCapture) {
     const list = fallen[flyingCapture.color];
     const i = list.lastIndexOf(flyingCapture.type);
     if (i !== -1) list.splice(i, 1);
   }
   const flipped = you === "b";
-  fillTray(fallenTopEl, flipped ? "w" : "b", fallen);
-  fillTray(fallenBottomEl, flipped ? "b" : "w", fallen);
+  renderTray(fallenTopEl, flipped ? "w" : "b", fallen);
+  renderTray(fallenBottomEl, flipped ? "b" : "w", fallen);
 }
 
-// Each side's losses sit on its own edge, so a captured piece flies to the tray
-// on its owner's side — mirroring renderFallen's top/bottom mapping.
+// A captured piece flies to the tray on its owner's side — mirroring the
+// top/bottom mapping renderFallen uses.
 function trayFor(color) {
   const flipped = you === "b";
   return color === (flipped ? "w" : "b") ? fallenTopEl : fallenBottomEl;
 }
 
-// Clone the just-captured piece and animate it from its square into the drawer.
+// Clone the just-captured piece and animate it from its square into the tray.
 // The tray piece itself is held back (see renderFallen) until this ghost lands.
 function flyCapture() {
   if (!flyingCapture || flyingCapture.started) return;
@@ -464,21 +423,10 @@ function flyCapture() {
     landed = true;
     ghost.remove();
     flyingCapture = null;
-    renderFallen(); // the piece now appears in the drawer, as the ghost arrives
+    renderFallen(); // the piece now appears in the tray, as the ghost arrives
   };
   ghost.addEventListener("transitionend", land, { once: true });
   setTimeout(land, 650); // fallback if transitionend never fires
-}
-
-function fillTray(el, color, fallen) {
-  el.setAttribute("aria-label", `${color === "w" ? "White" : "Black"} pieces captured`);
-  el.innerHTML = "";
-  for (const type of fallen[color].sort((a, b) => FALLEN_ORDER.indexOf(a) - FALLEN_ORDER.indexOf(b))) {
-    const span = document.createElement("span");
-    span.className = `fallen ${color}`;
-    span.textContent = GLYPH[type] + TEXT;
-    el.appendChild(span);
-  }
 }
 
 function renderMoves() {

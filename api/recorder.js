@@ -1,5 +1,5 @@
 import { neon } from "@neondatabase/serverless";
-import { Chess } from "chess.js";
+import { replay } from "../replay.js";
 
 // Best-effort archive of every *finished* game into Postgres, so games can be
 // queried and analyzed later. The authoritative game state lives in Blob (see
@@ -73,8 +73,7 @@ const iso = (ms) => (ms == null ? null : new Date(ms).toISOString());
 // Derive the flat analysis record from a finished game document. Pure (only
 // chess.js) so it can be unit-tested without a database. Exported for test.js.
 export function gameRecord(doc) {
-  const chess = new Chess(doc.startFen || undefined);
-  for (const san of doc.moves) chess.move(san);
+  const chess = replay(doc);
 
   const winner = doc.result?.winner ?? null; // 'w' | 'b' | null (draw)
   const reason = doc.result?.reason ?? "unknown";

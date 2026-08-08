@@ -1,0 +1,278 @@
+/* ── Midnight chess club ──────────────────────────────────────────────
+   Everything used by more than one page: design tokens, the page shell,
+   buttons, and the board itself. Imported by index.html, learn.html and
+   tutorial.html. Page-specific chrome lives in game.css / learn.css.
+
+   The board is styled by CLASS, not id, so a page can show several at
+   once (the tutorial index renders a small one per card). Override
+   --board-w on a .board to resize it; --sq follows automatically. */
+
+:root {
+  /* palette */
+  --bg: #0c1310;
+  --bg-glow: #1a2a21;
+  --ink: #eae1cb;
+  --muted: #93a08d;
+  --gold: #d3a94f;
+  --gold-bright: #e9c876;
+  --danger: #c96a55;
+
+  /* board */
+  --light-sq: #ecd9ad;
+  --dark-sq: #8f6136;
+  --frame: #3a2a1a;
+  --sq-label-on-light: #7a5230;
+  --sq-label-on-dark: var(--light-sq);
+
+  /* pieces */
+  --piece-w: #f6efdc;
+  --piece-b: #241a12;
+  --piece-w-edge: rgba(58, 42, 26, .65);
+  --piece-w-shadow: 0 2px 3px rgba(0, 0, 0, .55);
+  --piece-b-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 0 1px rgba(246, 239, 220, .25);
+  /* off the board there is no square underneath to carry the colour, so the
+     board's near-black would vanish into the felt — captured black pieces go
+     wood-brown against White's parchment instead. */
+  --fallen-w: #f0e6cd;
+  --fallen-b: #6b5138;
+
+  /* surfaces and lines */
+  --hairline: rgba(234, 225, 203, .18);
+  --hairline-soft: rgba(234, 225, 203, .14);
+  --well: rgba(0, 0, 0, .3);
+  --gold-line: rgba(211, 169, 79, .45);
+  --gold-line-soft: rgba(211, 169, 79, .35);
+  --gold-wash: rgba(211, 169, 79, .07);
+  --gold-wash-strong: rgba(211, 169, 79, .25);
+  --danger-line: rgba(201, 106, 85, .5);
+  --danger-wash: rgba(201, 106, 85, .12);
+  --highlight: rgba(233, 200, 118, .26);
+  --highlight-soft: rgba(233, 200, 118, .18);
+  --ink-soft: rgba(234, 225, 203, .84);
+  --ink-wash: rgba(234, 225, 203, .07);
+  --on-gold: #211708;      /* text sitting on a gold fill */
+  --hint-ink: rgba(20, 14, 4, .3);
+  --check-glow: rgba(214, 69, 49, .8);
+  --ok: #7fb069;
+
+  /* the shared entrance; stagger with animation-delay */
+  --rise: rise .5s ease both;
+
+  /* type */
+  --serif: "Fraunces", Georgia, "Iowan Old Style", serif;
+  --body-font: Georgia, "Iowan Old Style", serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* metrics */
+  --page: min(960px, 94vw);
+  --board-w: min(92vw, 560px);
+  --sq: calc(var(--board-w) / 8);
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  padding: 28px 18px 40px;
+  color: var(--ink);
+  font-family: var(--body-font);
+  background:
+    radial-gradient(1100px 700px at 50% -12%, var(--bg-glow) 0%, var(--bg) 62%),
+    var(--bg);
+  position: relative;
+}
+/* felt grain */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  opacity: .05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── page shell ─────────────────────────────────────────────────── */
+header {
+  width: var(--page);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  animation: var(--rise);
+}
+h1 {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  letter-spacing: .01em;
+  text-wrap: balance;
+}
+h1 .knight { color: var(--gold); }
+h1 a { color: inherit; text-decoration: none; }
+h1 a:hover { color: var(--gold-bright); }
+
+/* cross-links between the game and the openings */
+.masthead-link {
+  font-size: .85rem;
+  color: var(--muted);
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 1px solid transparent;
+  transition: color .15s ease, border-color .15s ease;
+}
+.masthead-link:hover { color: var(--gold-bright); border-bottom-color: var(--gold-line); }
+
+main { display: flex; flex-direction: column; align-items: center; gap: 22px; width: 100%; }
+
+footer { color: var(--muted); font-size: .8rem; text-align: center; opacity: .75; }
+
+/* ── buttons ────────────────────────────────────────────────────── */
+.btn {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: .95rem;
+  padding: 9px 18px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform .12s ease, background .15s ease, color .15s ease;
+}
+.btn:active:not(:disabled) { transform: scale(.97); }
+.btn:disabled { opacity: .35; cursor: default; }
+.btn.gold { background: var(--gold); color: var(--on-gold); }
+.btn.gold:hover:not(:disabled) { background: var(--gold-bright); }
+.btn.danger { background: transparent; color: var(--danger); border-color: var(--danger-line); }
+.btn.danger:hover:not(:disabled) { background: var(--danger-wash); }
+.btn.ghost { background: transparent; color: var(--muted); border-color: var(--hairline); }
+.btn.ghost:hover:not(:disabled) { color: var(--ink); border-color: var(--gold-line); }
+
+:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
+
+/* ── board ──────────────────────────────────────────────────────── */
+#boardwrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+.board {
+  /* Re-declared here, not just on :root, so a board that overrides --board-w
+     scales its own squares. A custom property is substituted where it is
+     declared — --sq computed at :root would keep the root's board size, and
+     the oversized glyphs would then force the 1fr rows open. */
+  --sq: calc(var(--board-w) / 8);
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr); /* both axes, or empty ranks collapse */
+  width: var(--board-w);
+  aspect-ratio: 1;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 6px solid var(--frame);
+  outline: 1px solid var(--gold-line-soft);
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, .85), 0 2px 0 rgba(233, 200, 118, .12) inset;
+  flex: 0 0 auto;
+}
+.square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* A 1fr track still floors at min-content, so an oversized glyph — or one
+     measured before its font has loaded — can push a rank open. Zeroing the
+     minimums makes every square exactly 1/8 of the board, whatever is on it. */
+  min-width: 0;
+  min-height: 0;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.square.light { background: var(--light-sq); color: var(--sq-label-on-light); }
+.square.dark  { background: var(--dark-sq);  color: var(--sq-label-on-dark); }
+
+.square[data-file]::after,
+.square[data-rank]::before {
+  position: absolute;
+  font: 600 calc(var(--sq) * .16)/1 var(--body-font);
+  opacity: .6;
+}
+.square[data-file]::after { content: attr(data-file); right: 5%; bottom: 4%; }
+.square[data-rank]::before { content: attr(data-rank); left: 5%; top: 4%; }
+
+/* Last move: a soft tint on the square it left, a bright ring on the square it
+   landed on — steady, not a fleeting blink. */
+.square.last { box-shadow: inset 0 0 0 100vmax var(--highlight-soft); }
+.square.last-to {
+  box-shadow: inset 0 0 0 max(3px, calc(var(--sq) * .06)) var(--gold-bright),
+              inset 0 0 0 100vmax var(--highlight);
+}
+.square.selected { box-shadow: inset 0 0 0 3px var(--gold); }
+.square.check {
+  background-image: radial-gradient(circle at 50% 50%, var(--check-glow), rgba(214, 69, 49, 0) 68%);
+}
+.square.hint { cursor: pointer; }
+.square.hint::after {
+  content: "";
+  position: absolute;
+  width: 30%; height: 30%;
+  border-radius: 50%;
+  background: var(--hint-ink);
+  right: auto; bottom: auto;
+}
+.square.capture-hint { cursor: pointer; box-shadow: inset 0 0 0 calc(var(--sq) * .07) var(--hint-ink); }
+
+/* a small board has no room for coordinates or hover affordances */
+.board.mini { --board-w: 132px; border-width: 3px; border-radius: 4px; box-shadow: none; }
+.board.mini .square[data-file]::after,
+.board.mini .square[data-rank]::before { content: none; }
+
+.piece {
+  font-size: calc(var(--sq) * .74);
+  line-height: 1;
+  transform: translateY(-2%);
+}
+.piece.w { color: var(--piece-w); text-shadow: var(--piece-w-shadow); -webkit-text-stroke: 1px var(--piece-w-edge); }
+.piece.b { color: var(--piece-b); text-shadow: var(--piece-b-shadow); }
+.piece.mine { cursor: pointer; transition: transform .12s ease; }
+.square:hover .piece.mine { transform: translateY(-6%) scale(1.04); }
+.piece.just-moved { animation: land .32s ease; }
+
+/* ── fallen-piece trays ─────────────────────────────────────────── */
+.tray {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: var(--board-w);
+  min-height: calc(var(--sq) * .86); /* reserved for a full-size glyph, so the board doesn't jump */
+  padding: 2px 4px;
+}
+.fallen { font-size: calc(var(--sq) * .74); line-height: 1; } /* same size as pieces on the board */
+/* A captured piece, cloned and flown from its square into the owner's tray. */
+.fallen.flying {
+  position: fixed;
+  z-index: 60;
+  margin: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform .5s cubic-bezier(.35, .8, .35, 1);
+  will-change: transform;
+}
+.fallen.w { color: var(--fallen-w); text-shadow: 0 1px 2px rgba(0, 0, 0, .45); }
+.fallen.b { color: var(--fallen-b); }
+
+/* ── motion ─────────────────────────────────────────────────────── */
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes pop { from { transform: scale(.72); } }
+@keyframes land {
+  0%   { transform: translateY(-2%) scale(1.32); }
+  55%  { transform: translateY(-2%) scale(.95); }
+  100% { transform: translateY(-2%) scale(1); }
+}
+@keyframes fade { from { opacity: 0; } }
+@keyframes pulse { 50% { opacity: .25; } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
