@@ -1,1 +1,5 @@
-LmVudioKLmNsYXVkZQpjaGVjay5tanMKLnZlcmNlbAo=
+.env*
+.claude
+check.mjs
+.vercel
+node_modules
