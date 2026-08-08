@@ -129,12 +129,22 @@ main { display: flex; flex-direction: column; align-items: center; gap: 22px; wi
   flex-wrap: wrap;
   align-items: center;
   width: var(--board-w);
-  min-height: calc(var(--sq) * .44); /* reserved, so the board doesn't jump on the first capture */
-  padding: 0 4px;
+  min-height: calc(var(--sq) * .86); /* reserved for a full-size glyph, so the board doesn't jump */
+  padding: 2px 4px;
 }
 .fallen {
-  font-size: calc(var(--sq) * .38);
+  font-size: calc(var(--sq) * .74); /* same size as the pieces still on the board */
   line-height: 1;
+}
+/* A captured piece, cloned and flown from its square into the owner's drawer. */
+.fallen.flying {
+  position: fixed;
+  z-index: 60;
+  margin: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: transform .5s cubic-bezier(.35, .8, .35, 1);
+  will-change: transform;
 }
 /* No square underneath here, so the felt has to carry both colors: the board's
    near-black would vanish against it, so Black's losses go wood-brown instead. */
@@ -174,7 +184,14 @@ main { display: flex; flex-direction: column; align-items: center; gap: 22px; wi
 .square[data-file]::after { content: attr(data-file); right: 5%; bottom: 4%; }
 .square[data-rank]::before { content: attr(data-rank); left: 5%; top: 4%; }
 
-.square.last { box-shadow: inset 0 0 0 100vmax rgba(233, 200, 118, .28); }
+/* Last move: a soft tint on the square it left, and a bright ring on the square
+   it landed on — steady (not a fleeting blink), so the last-moved piece is easy
+   to find without being distracting. */
+.square.last { box-shadow: inset 0 0 0 100vmax rgba(233, 200, 118, .18); }
+.square.last-to {
+  box-shadow: inset 0 0 0 max(3px, calc(var(--sq) * .06)) var(--gold-bright),
+              inset 0 0 0 100vmax rgba(233, 200, 118, .26);
+}
 .square.selected { box-shadow: inset 0 0 0 3px var(--gold); }
 .square.check {
   background-image: radial-gradient(circle at 50% 50%, rgba(214, 69, 49, .8), rgba(214, 69, 49, 0) 68%);
@@ -199,7 +216,7 @@ main { display: flex; flex-direction: column; align-items: center; gap: 22px; wi
 .piece.b { color: #241a12; text-shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 0 1px rgba(246, 239, 220, .25); }
 .piece.mine { cursor: pointer; transition: transform .12s ease; }
 .square:hover .piece.mine { transform: translateY(-6%) scale(1.04); }
-.piece.just-moved { animation: pop .18s ease; }
+.piece.just-moved { animation: land .32s ease; }
 
 /* side panel */
 #panel {
@@ -342,6 +359,11 @@ footer { color: var(--muted); font-size: .8rem; text-align: center; opacity: .75
 
 @keyframes rise { from { opacity: 0; transform: translateY(10px); } }
 @keyframes pop { from { transform: scale(.72); } }
+@keyframes land {
+  0%   { transform: translateY(-2%) scale(1.32); }
+  55%  { transform: translateY(-2%) scale(.95); }
+  100% { transform: translateY(-2%) scale(1); }
+}
 @keyframes fade { from { opacity: 0; } }
 @keyframes pulse { 50% { opacity: .25; } }
 
