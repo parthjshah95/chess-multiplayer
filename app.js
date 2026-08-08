@@ -488,6 +488,16 @@ if (notifySupported && "serviceWorker" in navigator) {
     .then((reg) => { swReg = reg; }, () => { /* fall back to the constructor */ });
 }
 
+// Ask on load whenever permission isn't granted yet, instead of making the player
+// find the in-game button. requestPermission() is a no-op once denied, so this only
+// actually prompts while the choice is pending; granting flips alerts on so they fire.
+// ponytail: Safari only prompts from a user gesture — #notify stays the fallback there.
+if (notifySupported && Notification.permission !== "granted") {
+  Notification.requestPermission()
+    .then((permission) => { if (permission === "granted") setNotify(true); })
+    .catch(() => {});
+}
+
 const pageInView = () => !document.hidden && document.hasFocus();
 
 function syncNotifyUi() {
