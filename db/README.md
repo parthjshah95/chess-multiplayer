@@ -35,6 +35,12 @@ See [`schema.sql`](./schema.sql). One row per finished game, keyed by
 `(id, game_no)` — a rematch reuses the same game `id`, so `game_no` (1, 2, 3…)
 separates the individual games on a rematch chain.
 
+**Players.** Each player can type a display name (remembered on their device and
+sent when they create or join a game); it's stored as `white_name` / `black_name`
+and also written into the PGN's `White` / `Black` headers. Names are optional and
+self-declared — anyone can type any name, so treat them as friendly labels, not
+verified identities. A seat with no name recorded is `NULL`.
+
 ## Example analysis queries
 
 ```sql
@@ -70,4 +76,41 @@ SELECT ended_at, result, reason, move_count, pgn
 FROM games
 ORDER BY ended_at DESC
 LIMIT 10;
+```
+
+### Per-player analysis
+
+Replace `'Parth'` with the name you want to study.
+
+```sql
+-- Every game a player played, newest first (either color)
+SELECT ended_at, white_name, black_name, result, reason, move_count, pgn
+FROM games
+WHERE 'Parth' IN (white_name, black_name)
+ORDER BY ended_at DESC;
+
+-- That player's record: wins / losses / draws
+SELECT
+  count(*) FILTER (WHERE (winner = 'w' AND white_name = 'Parth')
+                      OR (winner = 'b' AND black_name = 'Parth')) AS wins,
+  count(*) FILTER (WHERE (winner = 'w' AND black_name = 'Parth')
+                      OR (winner = 'b' AND white_name = 'Parth')) AS losses,
+  count(*) FILTER (WHERE winner IS NULL)                          AS draws
+FROM games
+WHERE 'Parth' IN (white_name, black_name);
+
+-- Games that player *lost* — the ones to study for weaknesses (PGN + how it ended)
+SELECT ended_at,
+       CASE WHEN white_name = 'Parth' THEN 'White' ELSE 'Black' END AS played_as,
+       reason, move_count, pgn
+FROM games
+WHERE ((winner = 'w' AND black_name = 'Parth') OR (winner = 'b' AND white_name = 'Parth'))
+ORDER BY ended_at DESC;
+
+-- Their most common opening move as White (spot repetitive habits)
+SELECT moves->>0 AS first_move, count(*)
+FROM games
+WHERE white_name = 'Parth' AND jsonb_array_length(moves) > 0
+GROUP BY first_move
+ORDER BY count DESC;
 ```

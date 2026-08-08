@@ -22,10 +22,16 @@ for (const san of ["f3", "e5", "g4", "Qh4#"]) fools.move(san);
 const mateDoc = {
   id: "abc123", gameNo: 1, createdAt: 1000, startedAt: 2000, endedAt: 5000,
   startFen: null, moves: ["f3", "e5", "g4", "Qh4#"], fen: fools.fen(),
+  names: { w: "Parth", b: "Sam" },
   status: "over", result: { winner: "b", reason: "checkmate" },
 };
 const mate = gameRecord(mateDoc);
 assert.equal(mate.id, "abc123");
+// Names are carried onto the record and into the PGN's White/Black headers.
+assert.equal(mate.whiteName, "Parth");
+assert.equal(mate.blackName, "Sam");
+assert.ok(mate.pgn.includes('[White "Parth"]'), "pgn should name White");
+assert.ok(mate.pgn.includes('[Black "Sam"]'), "pgn should name Black");
 assert.equal(mate.gameNo, 1);
 assert.equal(mate.winner, "b");
 assert.equal(mate.reason, "checkmate");
@@ -61,5 +67,9 @@ assert.equal(legacy.gameNo, 1);
 assert.equal(legacy.result, "1-0");
 assert.equal(legacy.startedAt, new Date(500).toISOString());
 assert.equal(legacy.durationMs, null);
+// A doc with no names records nulls and falls back to anonymous PGN headers.
+assert.equal(legacy.whiteName, null);
+assert.equal(legacy.blackName, null);
+assert.ok(legacy.pgn.includes('[White "White"]'), "anonymous game keeps default White header");
 
 console.log("ok");

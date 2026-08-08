@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS games (
                                                --   threefold repetition | insufficient material |
                                                --   fifty-move rule
   result       TEXT        NOT NULL,           -- '1-0' | '0-1' | '1/2-1/2'
+  white_name   TEXT,                           -- player-provided name; NULL if anonymous
+  black_name   TEXT,                           -- player-provided name; NULL if anonymous
   ply_count    INTEGER     NOT NULL,           -- half-moves played
   move_count   INTEGER     NOT NULL,           -- full moves (ceil(ply_count / 2))
   start_fen    TEXT,                           -- NULL for a standard start position
@@ -30,5 +32,7 @@ CREATE TABLE IF NOT EXISTS games (
   PRIMARY KEY (id, game_no)
 );
 
-CREATE INDEX IF NOT EXISTS games_ended_at_idx ON games (ended_at);
-CREATE INDEX IF NOT EXISTS games_reason_idx   ON games (reason);
+CREATE INDEX IF NOT EXISTS games_ended_at_idx   ON games (ended_at);
+CREATE INDEX IF NOT EXISTS games_reason_idx     ON games (reason);
+CREATE INDEX IF NOT EXISTS games_white_name_idx ON games (white_name);
+CREATE INDEX IF NOT EXISTS games_black_name_idx ON games (black_name);
