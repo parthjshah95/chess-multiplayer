@@ -2,6 +2,7 @@ import { list, put } from "@vercel/blob";
 import { Chess } from "chess.js";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { recordGame } from "./recorder.js";
+import { replay } from "../replay.js";
 
 // One JSON document per game version: games/<id>/v000042.json
 // A new version is written with overwrite disabled, so two racing writers
@@ -15,12 +16,6 @@ const sha = (s) => createHash("sha256").update(s).digest("hex");
 const other = (c) => (c === "w" ? "b" : "w");
 const versionPath = (id, v) => `games/${id}/v${String(v).padStart(6, "0")}.json`;
 export const versionOf = (pathname) => Number(pathname.split("/").pop().slice(1, -5));
-
-function replay(doc) {
-  const chess = new Chess(doc.startFen || undefined);
-  for (const san of doc.moves) chess.move(san);
-  return chess;
-}
 
 async function latestBlob(id) {
   let cursor;

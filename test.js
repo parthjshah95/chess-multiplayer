@@ -64,6 +64,30 @@ assert.equal(legacy.result, "1-0");
 assert.equal(legacy.startedAt, new Date(500).toISOString());
 assert.equal(legacy.durationMs, null);
 
+// ── schema, defined in two places ───────────────────────────────────
+// ensureSchema() in api/recorder.js creates the table at runtime; db/schema.sql
+// documents it for anyone provisioning ahead of time. Two copies of one truth
+// drift silently, and because the app auto-creates the table, a stale
+// schema.sql would only surface as a failed INSERT in production.
+const sqlText = (path) => readFileSync(new URL(path, import.meta.url), "utf8")
+  .replace(/--[^\n]*/g, " ").replace(/\s+/g, " ");
+const columnsOf = (text) => {
+  const body = text.slice(text.search(/CREATE TABLE IF NOT EXISTS games/i), text.search(/PRIMARY KEY/i));
+  return [...body.matchAll(/(\w+)\s+(TEXT|INTEGER|JSONB|TIMESTAMPTZ|BIGINT)\b/gi)]
+    .map(([, name, type]) => `${name.toLowerCase()} ${type.toUpperCase()}`);
+};
+const indexesOf = (text) =>
+  [...text.matchAll(/CREATE INDEX IF NOT EXISTS (\w+) ON games \((\w+)\)/gi)]
+    .map(([, name, col]) => `${name}(${col})`).sort();
+
+const fromFile = sqlText("./db/schema.sql");
+const fromCode = sqlText("./api/recorder.js");
+assert.ok(columnsOf(fromFile).length >= 10, "db/schema.sql: no columns parsed — did the DDL move?");
+assert.deepEqual(columnsOf(fromCode), columnsOf(fromFile),
+  "api/recorder.js and db/schema.sql disagree about the games table columns");
+assert.deepEqual(indexesOf(fromCode), indexesOf(fromFile),
+  "api/recorder.js and db/schema.sql disagree about the games table indexes");
+
 // ── tutorial content ────────────────────────────────────────────────
 // normalize() replays every move through chess.js, so an illegal or mistyped
 // line fails here rather than rendering a wrong position to a reader.
