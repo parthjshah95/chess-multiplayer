@@ -4,5 +4,59 @@
     "title": "The Italian Game",
     "level": "Beginner",
     "blurb": "Chess's oldest recorded opening, and the clearest place to learn what the first ten moves are actually for."
+  },
+  {
+    "slug": "ruy-lopez",
+    "title": "The Ruy López",
+    "level": "Intermediate",
+    "blurb": "The oldest opening still played at the top, and the deepest lesson in slow pressure rather than quick threats."
+  },
+  {
+    "slug": "scotch-game",
+    "title": "The Scotch Game",
+    "level": "Beginner",
+    "blurb": "Break the centre open on move three. The clearest antidote if you find the Ruy López too slow."
+  },
+  {
+    "slug": "sicilian-alapin",
+    "title": "Beating the Sicilian: the Alapin",
+    "level": "Beginner",
+    "blurb": "The Sicilian is the most popular answer to 1.e4 and has a mountain of theory. 2.c3 sidesteps almost all of it."
+  },
+  {
+    "slug": "french-advance",
+    "title": "The French Advance",
+    "level": "Beginner",
+    "blurb": "Take space and lock the centre, then attack. The other half of a lesson about one badly placed bishop."
+  },
+  {
+    "slug": "caro-kann-advance",
+    "title": "The Caro-Kann Advance",
+    "level": "Beginner",
+    "blurb": "The same structure as the French, reached one move differently — and that one move solves Black's worst problem."
+  },
+  {
+    "slug": "queens-gambit-declined",
+    "title": "The Queen's Gambit Declined",
+    "level": "Beginner",
+    "blurb": "The most respectable answer to 1.d4 in existence. Solid, principled, and unrefuted for a hundred and fifty years."
+  },
+  {
+    "slug": "slav-defence",
+    "title": "The Slav Defence",
+    "level": "Intermediate",
+    "blurb": "Decline the Queen's Gambit without burying your bishop. The same fix the Caro-Kann applies, one opening over."
+  },
+  {
+    "slug": "london-system",
+    "title": "The London System",
+    "level": "Beginner",
+    "blurb": "A setup, not a line: the same five moves against almost anything Black plays. The lowest-maintenance opening in chess."
+  },
+  {
+    "slug": "kings-indian",
+    "title": "The King's Indian Defence",
+    "level": "Intermediate",
+    "blurb": "Hand White the entire centre on purpose, then blow it up. The most aggressive answer to 1.d4 there is."
   }
 ]

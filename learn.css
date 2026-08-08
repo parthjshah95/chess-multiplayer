@@ -67,7 +67,8 @@
   color: var(--gold-bright);
 }
 .card p { color: var(--muted); font-size: .88rem; }
-.card-meta { display: flex; gap: 10px; }
+.card-meta { display: flex; flex-wrap: wrap; gap: 4px 8px; letter-spacing: .1em; }
+.card-meta span { white-space: nowrap; } /* wrap between items, never inside one */
 .card-meta span + span::before { content: "·"; margin-right: 10px; opacity: .6; }
 
 .empty { width: var(--page); color: var(--muted); }

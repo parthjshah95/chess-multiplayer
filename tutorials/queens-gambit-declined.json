@@ -1,0 +1,116 @@
+{
+  "startFen": null,
+  "slug": "queens-gambit-declined",
+  "title": "The Queen's Gambit Declined",
+  "eyebrow": "Opening study · vs 1.d4",
+  "standfirst": "If you play 1…e5 against 1.e4 because it's the straightforward, classical answer, this is the equivalent against 1.d4.",
+  "steps": [
+    {
+      "tag": "The board",
+      "title": "The other first move",
+      "body": [
+        "1.d4 leads to slower, more structural games than 1.e4. You need an answer, and this is the one that has never been refuted.",
+        "One thing to settle immediately: the Queen's Gambit is <b>not really a gambit</b>."
+      ]
+    },
+    {
+      "san": "d4",
+      "tag": "The centre",
+      "title": "The queen's pawn opening",
+      "body": [
+        "Unlike 1.e4, this pawn is defended from the start — by the queen. That's why 1.d4 games tend to be slower."
+      ]
+    },
+    {
+      "san": "d5",
+      "tag": "The centre",
+      "title": "Mirror it",
+      "body": [
+        "Black takes his share, defended by his own queen."
+      ]
+    },
+    {
+      "san": "c4",
+      "tag": "The gambit",
+      "title": "The offer that isn't",
+      "body": [
+        "White attacks d5 from the side, inviting …dxc4. But you cannot <b>keep</b> that pawn: after …dxc4 White plays e3 and Bxc4, regaining it with a strong centre.",
+        "So it's a gambit in name only — really it's a way to deflect Black's d-pawn and take over the centre."
+      ]
+    },
+    {
+      "san": "e6",
+      "tag": "Declined",
+      "title": "Refuse politely",
+      "body": [
+        "Black declines, reinforcing d5 with a pawn. Solid and correct — though note it does shut in the c8 bishop, the same complaint as the French. The Slav study shows the alternative."
+      ]
+    },
+    {
+      "san": "Nc3",
+      "tag": "Development",
+      "title": "A third attacker on d5",
+      "body": [
+        "White keeps the pressure on the one contested square."
+      ]
+    },
+    {
+      "san": "Nf6",
+      "tag": "Development",
+      "title": "A second defender",
+      "body": [
+        "Black matches him, and develops toward the centre."
+      ]
+    },
+    {
+      "san": "Bg5",
+      "tag": "The pin",
+      "title": "Attack the defender",
+      "body": [
+        "The same idea as the Ruy López's Bb5, one file over: don't attack the pawn, attack what defends it. The f6 knight is now pinned against the queen and can't easily move.",
+        "Pins on a defender are worth more than pins on nothing."
+      ]
+    },
+    {
+      "san": "Be7",
+      "tag": "Solidity",
+      "title": "Break the sting",
+      "body": [
+        "Black doesn't try to escape the pin — he defuses it. With the bishop on e7 the knight is defended, so Bxf6 no longer wins anything and merely trades a good bishop for a knight."
+      ]
+    },
+    {
+      "san": "e3",
+      "tag": "Solidity",
+      "title": "The modest move",
+      "body": [
+        "It shuts in the c1 bishop, which is why beginners dislike it — but that bishop is already outside on g5. There's nothing left to shut in, so the move is simply solid."
+      ]
+    },
+    {
+      "san": "O-O",
+      "tag": "King safety",
+      "title": "Tuck the king away",
+      "body": [
+        "Black is fully developed on the kingside and completely safe. Nothing has gone wrong, which is the entire point of this opening."
+      ]
+    },
+    {
+      "san": "Nf3",
+      "tag": "Development",
+      "title": "Finish the job",
+      "body": [
+        "The last minor piece comes out. Both sides have played only sensible moves and both are fine."
+      ]
+    },
+    {
+      "san": "h6",
+      "tag": "The tabiya",
+      "title": "Ask the bishop the question",
+      "body": [
+        "Black finally puts the question to the pinning bishop. White usually plays Bh4 to keep the pin, and the middlegame begins.",
+        "White's plan is the <b>minority attack</b> — pushing the b-pawn to create a weakness on c6. Black plays in the centre or on the kingside. Solid, strategic, and famously hard to lose with."
+      ]
+    }
+  ]
+}
