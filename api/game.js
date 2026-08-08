@@ -1,6 +1,7 @@
 import { list, put } from "@vercel/blob";
 import { Chess } from "chess.js";
 import { createHash, randomBytes, randomUUID } from "node:crypto";
+import { recordGame } from "./recorder.js";
 
 // One JSON document per game version: games/<id>/v000042.json
 // A new version is written with overwrite disabled, so two racing writers
@@ -130,6 +131,7 @@ export default async function handler(req, res) {
       const chess = new Chess(startFen || undefined);
       const doc = {
         id, v: 1, createdAt: Date.now(), startFen,
+        gameNo: 1, startedAt: null, endedAt: null,
         seats: { w: null, b: null },
         moves: [], fen: chess.fen(), turn: chess.turn(), lastMove: null,
         status: "waiting", result: null,
@@ -153,7 +155,10 @@ export default async function handler(req, res) {
       if (!open) return res.status(200).json({ state: publicState(doc, null) }); // spectator
       const key = randomUUID();
       doc.seats[open] = sha(key);
-      if (doc.seats.w && doc.seats.b) doc.status = "active";
+      if (doc.seats.w && doc.seats.b) {
+        doc.status = "active";
+        doc.startedAt = Date.now();
+      }
       doc.v += 1;
       await writeDoc(doc);
       return res.status(200).json({ key, state: publicState(doc, key) });
@@ -177,8 +182,10 @@ export default async function handler(req, res) {
       doc.turn = chess.turn();
       doc.lastMove = { from: mv.from, to: mv.to, captured: !!mv.captured };
       finishByPosition(doc, chess, you);
+      if (doc.status === "over") doc.endedAt = Date.now();
       doc.v += 1;
       await writeDoc(doc);
+      if (doc.status === "over") await recordGame(doc); // best-effort; never throws
       return res.status(200).json({ state: publicState(doc, body.key) });
     }
 
@@ -186,8 +193,10 @@ export default async function handler(req, res) {
       if (doc.status !== "active") return res.status(400).json({ error: "game is not active" });
       doc.status = "over";
       doc.result = { winner: other(you), reason: "resignation" };
+      doc.endedAt = Date.now();
       doc.v += 1;
       await writeDoc(doc);
+      await recordGame(doc); // best-effort; never throws
       return res.status(200).json({ state: publicState(doc, body.key) });
     }
 
@@ -204,6 +213,11 @@ export default async function handler(req, res) {
         doc.lastMove = null;
         doc.status = "active";
         doc.result = null;
+        // A rematch reuses this id in place; bump game_no so it archives as a
+        // distinct game rather than overwriting the one just finished.
+        doc.gameNo = (doc.gameNo || 1) + 1;
+        doc.startedAt = Date.now();
+        doc.endedAt = null;
         doc.rematch = { w: false, b: false };
       }
       doc.v += 1;
