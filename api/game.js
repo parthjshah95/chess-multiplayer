@@ -13,6 +13,11 @@ const PROMOS = new Set(["q", "r", "b", "n"]);
 
 const sha = (s) => createHash("sha256").update(s).digest("hex");
 const other = (c) => (c === "w" ? "b" : "w");
+// A player-provided display name is the only identity in the system. Strip
+// control chars, quotes and backslashes (they'd break the PGN headers this name
+// lands in), trim, cap length; empty becomes null — anonymous, as before names.
+const cleanName = (s) =>
+  typeof s === "string" ? s.replace(/[\u0000-\u001f\u007f"\\]/g, "").trim().slice(0, 40) || null : null;
 const versionPath = (id, v) => `games/${id}/v${String(v).padStart(6, "0")}.json`;
 export const versionOf = (pathname) => Number(pathname.split("/").pop().slice(1, -5));
 
@@ -78,6 +83,7 @@ function publicState(doc, key) {
     lastMove: doc.lastMove,
     rematch: { w: !!doc.rematch.w, b: !!doc.rematch.b },
     seats: { w: !!doc.seats.w, b: !!doc.seats.b },
+    names: { w: doc.names?.w ?? null, b: doc.names?.b ?? null },
     you: seatOf(doc, key),
   };
 }
@@ -133,11 +139,13 @@ export default async function handler(req, res) {
         id, v: 1, createdAt: Date.now(), startFen,
         gameNo: 1, startedAt: null, endedAt: null,
         seats: { w: null, b: null },
+        names: { w: null, b: null },
         moves: [], fen: chess.fen(), turn: chess.turn(), lastMove: null,
         status: "waiting", result: null,
         rematch: { w: false, b: false },
       };
       doc.seats[color] = sha(key);
+      doc.names[color] = cleanName(body.name);
       await writeDoc(doc);
       return res.status(200).json({ key, state: publicState(doc, key) });
     }
@@ -155,6 +163,8 @@ export default async function handler(req, res) {
       if (!open) return res.status(200).json({ state: publicState(doc, null) }); // spectator
       const key = randomUUID();
       doc.seats[open] = sha(key);
+      doc.names ||= { w: null, b: null };
+      doc.names[open] = cleanName(body.name);
       if (doc.seats.w && doc.seats.b) {
         doc.status = "active";
         doc.startedAt = Date.now();
@@ -165,6 +175,14 @@ export default async function handler(req, res) {
     }
 
     if (!you) return res.status(403).json({ error: "not a player in this game" });
+
+    if (action === "name") {
+      doc.names ||= { w: null, b: null };
+      doc.names[you] = cleanName(body.name);
+      doc.v += 1;
+      await writeDoc(doc);
+      return res.status(200).json({ state: publicState(doc, body.key) });
+    }
 
     if (action === "move") {
       if (doc.status !== "active") return res.status(400).json({ error: "game is not active" });
@@ -206,6 +224,8 @@ export default async function handler(req, res) {
       if (doc.rematch.w && doc.rematch.b) {
         const chess = new Chess();
         [doc.seats.w, doc.seats.b] = [doc.seats.b, doc.seats.w]; // swap colors
+        doc.names ||= { w: null, b: null };
+        [doc.names.w, doc.names.b] = [doc.names.b, doc.names.w]; // names follow their player
         doc.startFen = null;
         doc.moves = [];
         doc.fen = chess.fen();

@@ -225,6 +225,16 @@ main { display: flex; flex-direction: column; align-items: center; gap: 22px; wi
   min-height: 1.6em;
 }
 #substatus { color: var(--muted); font-size: .92rem; min-height: 1.2em; }
+#playername {
+  font: .95rem/1.4 var(--serif);
+  color: var(--ink);
+  background: rgba(0, 0, 0, .35);
+  border: 1px solid rgba(234, 225, 203, .18);
+  border-radius: 7px;
+  padding: 9px 12px;
+}
+#playername:focus { outline: none; border-color: var(--gold); }
+#players { color: var(--muted); font-size: .9rem; letter-spacing: .02em; }
 
 #moves {
   list-style-position: inside;
