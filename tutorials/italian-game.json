@@ -1,0 +1,116 @@
+{
+  "slug": "italian-game",
+  "title": "The Italian Game",
+  "eyebrow": "Opening study · one line, twelve moves",
+  "standfirst": "Chess's oldest recorded opening, and still the clearest place to learn what the first ten moves are actually for. Step through it — every move is here because of an idea, not because a book said so.",
+  "startFen": null,
+  "steps": [
+    {
+      "tag": "The board",
+      "title": "Thirty-two pieces, no decisions yet",
+      "body": [
+        "Every opening is an argument about four squares: <b>e4, d4, e5 and d5</b>. Control them and your pieces radiate outward; concede them and you spend the game defending.",
+        "Watch what each move below is really doing. Almost none of them are about the piece that moves — they're about the squares it starts to cover."
+      ]
+    },
+    {
+      "san": "e4",
+      "tag": "The centre",
+      "title": "One move, two pieces freed",
+      "body": [
+        "The pawn claims a centre square, but the real gain is behind it: the <b>queen and the light-squared bishop</b> both now have open diagonals. No other first move releases two pieces at once.",
+        "This is why 1.e4 has been the most played move in recorded chess for four centuries."
+      ]
+    },
+    {
+      "san": "e5",
+      "tag": "The centre",
+      "title": "Black refuses to give ground",
+      "body": [
+        "The mirror answer. Black stakes an equal claim in the centre rather than conceding space and counterattacking later, which is what the Sicilian, French and Caro-Kann all do instead.",
+        "Symmetry isn't passive here — it's the most direct way to say <b>I want the same things you want</b>."
+      ]
+    },
+    {
+      "san": "Nf3",
+      "tag": "Development",
+      "title": "Develop, and ask a question",
+      "body": [
+        "The knight comes to its best square and <b>attacks e5</b> on the way. The strongest developing moves do two jobs, because a move that only develops gives your opponent a free hand.",
+        "Knights before bishops, generally: a knight's best square is usually obvious this early, a bishop's often isn't."
+      ]
+    },
+    {
+      "san": "Nc6",
+      "tag": "Development",
+      "title": "Defend with a piece you wanted to move anyway",
+      "body": [
+        "The e5 pawn needed help, and this is the way to give it: the knight defends <i>and</i> develops toward the centre.",
+        "Compare 2…d6, which also defends but locks in the dark-squared bishop. <b>The best defensive move is the one you'd have played regardless.</b>"
+      ]
+    },
+    {
+      "san": "Bc4",
+      "tag": "Development",
+      "title": "The Italian bishop finds its diagonal",
+      "body": [
+        "This is the move the opening is named for. The bishop's diagonal ends on <b>f7</b> — the one square in Black's camp defended by nothing but the king.",
+        "It isn't an immediate threat. It's a standing one, and it shapes every tactic in this opening for the next twenty moves."
+      ]
+    },
+    {
+      "san": "Bc5",
+      "tag": "Symmetry",
+      "title": "The Giuoco Piano — “the quiet game”",
+      "body": [
+        "Black copies the idea exactly, aiming at <b>f2</b>, White's matching soft spot. The position is now perfectly symmetrical and both sides are fully justified.",
+        "The name is four hundred years old and slightly misleading — it stays quiet only as long as both players want it to."
+      ]
+    },
+    {
+      "san": "c3",
+      "tag": "Preparation",
+      "title": "A small move with a large plan",
+      "body": [
+        "It develops nothing, and that's the point of showing it. c3 <b>prepares d4</b>: once the d-pawn advances, c3 is there to recapture and hold a broad pawn centre.",
+        "Openings aren't only about developing fastest. Sometimes a tempo buys a structure that pays for itself all game."
+      ]
+    },
+    {
+      "san": "Nf6",
+      "tag": "Counterplay",
+      "title": "Develop toward the enemy pawn",
+      "body": [
+        "The last minor piece comes out, and it comes out <b>hitting e4</b>. Black is now one move from castling.",
+        "Notice the pattern on both sides: nobody has moved a piece twice, and nobody has brought the queen out. Six moves in, that's what a healthy position looks like."
+      ]
+    },
+    {
+      "san": "d3",
+      "tag": "Restraint",
+      "title": "The modern choice: build, don't lunge",
+      "body": [
+        "The sharp 5.d4 exists and leads to enormous complications. <b>5.d3</b> instead defends e4, frees the dark-squared bishop, and keeps the centre stable — the Giuoco Pianissimo, “the very quiet game”.",
+        "It's the top-level preference today for a reason: a position you understand beats a position you've memorised."
+      ]
+    },
+    {
+      "san": "d6",
+      "tag": "Solidity",
+      "title": "Black shores up the centre",
+      "body": [
+        "Propping up e5 and opening the c8 bishop's diagonal. The structures are now locked in and both sides know what they're playing for.",
+        "This is where memory ends and chess begins — from here you're navigating by <b>plans</b>, not by recall."
+      ]
+    },
+    {
+      "san": "O-O",
+      "tag": "King safety",
+      "title": "Six moves, and everything is where it should be",
+      "body": [
+        "Two pawns in the centre, three minor pieces out, the king safe, and the rook joining the game. That's the whole job of an opening — you've done it without memorising a single trap.",
+        "From here the standard plan is <b>Re1</b>, then the slow knight tour <b>Nbd2–f1–g3</b>, bringing the last piece to the kingside where the attack will be. Play this line twenty times and you'll start seeing it before you calculate it."
+      ]
+    }
+  ]
+}
