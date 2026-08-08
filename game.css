@@ -39,6 +39,10 @@
   color: var(--gold-bright);
 }
 .share-sub { color: var(--muted); font-size: .92rem; margin-top: 2px; }
+/* Waiting for an opponent is the one moment a player has nothing to do. */
+.share-aside { color: var(--muted); font-size: .88rem; margin-top: 10px; }
+.share-aside a { color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold-line); }
+.share-aside a:hover { color: var(--gold-bright); border-bottom-color: var(--gold-bright); }
 .linkrow { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 
 /* text fields — the invite link and the player's name share one surface */

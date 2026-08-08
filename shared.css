@@ -100,9 +100,12 @@ header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 14px;
+  gap: 8px 14px;
+  flex-wrap: wrap; /* or a narrow screen crushes the title to fit its neighbours */
   animation: var(--rise);
 }
+/* Status and navigation travel together, so they wrap as one block */
+.masthead-side { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
 h1 {
   font-family: var(--serif);
   font-weight: 700;
@@ -115,15 +118,17 @@ h1 a { color: inherit; text-decoration: none; }
 h1 a:hover { color: var(--gold-bright); }
 
 /* cross-links between the game and the openings */
+/* Gold and underlined rather than muted — it competes with a chessboard for
+   attention, so it has to look like something you can click. */
 .masthead-link {
   font-size: .85rem;
-  color: var(--muted);
+  color: var(--gold);
   text-decoration: none;
   white-space: nowrap;
-  border-bottom: 1px solid transparent;
+  border-bottom: 1px solid var(--gold-line);
   transition: color .15s ease, border-color .15s ease;
 }
-.masthead-link:hover { color: var(--gold-bright); border-bottom-color: var(--gold-line); }
+.masthead-link:hover { color: var(--gold-bright); border-bottom-color: var(--gold-bright); }
 
 main { display: flex; flex-direction: column; align-items: center; gap: 22px; width: 100%; }
 
