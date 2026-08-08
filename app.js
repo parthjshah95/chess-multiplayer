@@ -7,6 +7,7 @@ const boardEl = $("board"), statusEl = $("status"), subStatusEl = $("substatus")
   movesEl = $("moves"), resignBtn = $("resign"), rematchBtn = $("rematch"),
   connChip = $("conn"), promoEl = $("promo"), promoButtons = $("promo-buttons"),
   roleEl = $("role"), notifyBtn = $("notify"),
+  nameInput = $("playername"), playersEl = $("players"),
   fallenTopEl = $("fallen-top"), fallenBottomEl = $("fallen-bottom");
 
 // ── url / identity ──────────────────────────────────────────────────
@@ -21,6 +22,12 @@ const saveSeatKey = (id, key) => {
   sessionStorage.setItem(seatStore(id), key);
   localStorage.setItem(seatStore(id), key);
 };
+// Your display name is remembered on this device and sent with create/join, so
+// returning players are labeled automatically. It's the identity the recorded-
+// game archive is keyed on (white_name/black_name).
+const NAME_KEY = "chess-name";
+const loadName = () => localStorage.getItem(NAME_KEY) || "";
+const saveName = (n) => localStorage.setItem(NAME_KEY, n);
 
 // ── state ───────────────────────────────────────────────────────────
 let state = null;          // latest server state (authoritative)
@@ -71,10 +78,12 @@ async function fetchState(id, since) {
 // ── boot ────────────────────────────────────────────────────────────
 init();
 async function init() {
+  nameInput.value = loadName();
+  nameInput.addEventListener("change", onNameChange);
   render();
   try {
     if (!urlGameId) {
-      const res = await api({ action: "create", fen: debugFen });
+      const res = await api({ action: "create", fen: debugFen, name: loadName() || undefined });
       myKey = res.key;
       saveSeatKey(res.state.id, myKey);
       history.replaceState(null, "", `#g=${res.state.id}`);
@@ -100,7 +109,7 @@ async function init() {
 async function joinWithRetry(id) {
   for (let attempt = 0; ; attempt++) {
     try {
-      return await api({ action: "join", id, key: myKey || undefined });
+      return await api({ action: "join", id, key: myKey || undefined, name: loadName() || undefined });
     } catch (err) {
       // 404 right after creation or a 409 seat race: brief retry, then give up
       if ((err.status === 404 || err.status === 409) && attempt < 3) {
@@ -110,6 +119,18 @@ async function joinWithRetry(id) {
       throw err;
     }
   }
+}
+
+// Remember the name on this device, and if we already hold a seat, patch it on
+// the server so this game (and its archived row) carries the name. Best-effort:
+// the name is saved locally either way.
+async function onNameChange() {
+  const name = nameInput.value.trim().slice(0, 40);
+  saveName(name);
+  if (!state || !you) return;
+  try {
+    applyState((await api({ action: "name", id: state.id, key: myKey, name: name || undefined })).state);
+  } catch { /* keep the local name; the next create/join will carry it */ }
 }
 
 // ── state application ───────────────────────────────────────────────
@@ -141,6 +162,10 @@ function syncUi() {
 
   roleEl.hidden = !s || s.status === "waiting";
   roleEl.textContent = you ? (you === "w" ? "You play White" : "You play Black") : "Spectating";
+
+  // You can set/change your name while you hold a seat and the game is live.
+  nameInput.hidden = !(s && you && s.status !== "over");
+  renderPlayers();
 
   if (failStreak > 0) setChip("err", "reconnecting…");
   else if (!s) setChip("waiting", "connecting…");
@@ -187,6 +212,15 @@ function updateStatus() {
   const mine = chess.turn() === you;
   setStatus(mine ? `Your move${check}` : `Waiting for your opponent${check}`,
     mine ? "Tap a piece, then a highlighted square." : "They can close the tab and come back — the game is saved.");
+}
+
+// Show both players' names once anyone has set one; a blank seat shows a dash, so
+// "White: Parth · Black: —" reads naturally while waiting for the opponent.
+function renderPlayers() {
+  const nm = state?.names;
+  if (!nm || (!nm.w && !nm.b)) { playersEl.hidden = true; return; }
+  playersEl.hidden = false;
+  playersEl.textContent = `White: ${nm.w || "—"} · Black: ${nm.b || "—"}`;
 }
 
 // ── polling ─────────────────────────────────────────────────────────

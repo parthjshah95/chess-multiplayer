@@ -33,6 +33,8 @@ async function ensureSchema() {
     winner       TEXT,
     reason       TEXT        NOT NULL,
     result       TEXT        NOT NULL,
+    white_name   TEXT,
+    black_name   TEXT,
     ply_count    INTEGER     NOT NULL,
     move_count   INTEGER     NOT NULL,
     start_fen    TEXT,
@@ -46,8 +48,14 @@ async function ensureSchema() {
     recorded_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     PRIMARY KEY (id, game_no)
   )`;
+  // Deployments that created the table before names existed get the columns now.
+  await sql`ALTER TABLE games ADD COLUMN IF NOT EXISTS white_name TEXT`;
+  await sql`ALTER TABLE games ADD COLUMN IF NOT EXISTS black_name TEXT`;
   await sql`CREATE INDEX IF NOT EXISTS games_ended_at_idx ON games (ended_at)`;
   await sql`CREATE INDEX IF NOT EXISTS games_reason_idx ON games (reason)`;
+  // Pull all of one player's games regardless of the color they had.
+  await sql`CREATE INDEX IF NOT EXISTS games_white_name_idx ON games (white_name)`;
+  await sql`CREATE INDEX IF NOT EXISTS games_black_name_idx ON games (black_name)`;
 }
 function ready() {
   // Cache the successful check; on failure clear it so the next write retries.
@@ -70,12 +78,15 @@ export function gameRecord(doc) {
   const winner = doc.result?.winner ?? null; // 'w' | 'b' | null (draw)
   const reason = doc.result?.reason ?? "unknown";
   const result = winner === "w" ? "1-0" : winner === "b" ? "0-1" : "1/2-1/2";
+  const whiteName = doc.names?.w ?? null; // player-provided; null when anonymous
+  const blackName = doc.names?.b ?? null;
 
-  // A self-contained PGN so any game can be dropped straight into a chess tool.
+  // A self-contained PGN so any game can be dropped straight into a chess tool —
+  // carrying the players' names so it's recognizable outside the database too.
   chess.setHeader("Event", "Chess with a Friend");
   chess.setHeader("Site", "chess-multiplayer");
-  chess.setHeader("White", "White");
-  chess.setHeader("Black", "Black");
+  chess.setHeader("White", whiteName || "White");
+  chess.setHeader("Black", blackName || "Black");
   chess.setHeader("Result", result);
   chess.setHeader("Termination", reason);
   if (doc.startFen) {
@@ -93,6 +104,8 @@ export function gameRecord(doc) {
     winner,
     reason,
     result,
+    whiteName,
+    blackName,
     plyCount,
     moveCount: Math.ceil(plyCount / 2),
     startFen: doc.startFen ?? null,
@@ -125,10 +138,10 @@ export async function recordGame(doc) {
         await ready();
         const r = gameRecord(doc);
         await sql`INSERT INTO games
-          (id, game_no, winner, reason, result, ply_count, move_count,
+          (id, game_no, winner, reason, result, white_name, black_name, ply_count, move_count,
            start_fen, final_fen, moves, pgn, started_at, ended_at, duration_ms, created_at)
           VALUES
-          (${r.id}, ${r.gameNo}, ${r.winner}, ${r.reason}, ${r.result}, ${r.plyCount}, ${r.moveCount},
+          (${r.id}, ${r.gameNo}, ${r.winner}, ${r.reason}, ${r.result}, ${r.whiteName}, ${r.blackName}, ${r.plyCount}, ${r.moveCount},
            ${r.startFen}, ${r.finalFen}, ${JSON.stringify(r.moves)}::jsonb, ${r.pgn},
            ${r.startedAt}, ${r.endedAt}, ${r.durationMs}, ${r.createdAt})
           ON CONFLICT (id, game_no) DO NOTHING`;

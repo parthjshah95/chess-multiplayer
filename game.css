@@ -40,16 +40,17 @@
 }
 .share-sub { color: var(--muted); font-size: .92rem; margin-top: 2px; }
 .linkrow { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-#link {
-  flex: 1 1 260px;
-  min-width: 0;
-  font: .85rem/1.4 var(--mono);
+
+/* text fields — the invite link and the player's name share one surface */
+#link, #playername {
   color: var(--ink);
   background: var(--well);
   border: 1px solid var(--hairline);
   border-radius: 7px;
-  padding: 10px 12px;
 }
+#link { flex: 1 1 260px; min-width: 0; font: .85rem/1.4 var(--mono); padding: 10px 12px; }
+#playername { font: .95rem/1.4 var(--serif); padding: 9px 12px; }
+#playername:focus { outline: none; border-color: var(--gold); }
 
 /* layout */
 #layout {
@@ -85,6 +86,7 @@
   min-height: 1.6em;
 }
 #substatus { color: var(--muted); font-size: .92rem; min-height: 1.2em; }
+#players { color: var(--muted); font-size: .9rem; letter-spacing: .02em; }
 
 #moves {
   list-style-position: inside;
