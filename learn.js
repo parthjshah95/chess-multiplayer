@@ -18,7 +18,11 @@ const fail = (message) => {
 const entries = await loadIndex().catch(() => null);
 if (!entries) fail("Couldn't load the studies — check your connection and reload.");
 else if (!entries.length) fail("No studies published yet.");
-else for (const entry of entries) cardsEl.appendChild(await card(entry));
+else {
+  // Build every card at once, then append in index order. Awaiting them one at
+  // a time meant one round-trip per study, so the page filled in visibly.
+  for (const li of await Promise.all(entries.map(card))) cardsEl.appendChild(li);
+}
 
 async function card(entry) {
   const li = document.createElement("li");

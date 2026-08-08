@@ -1,0 +1,115 @@
+{
+  "startFen": null,
+  "slug": "scotch-game",
+  "title": "The Scotch Game",
+  "eyebrow": "Opening study · 1.e4 e5",
+  "standfirst": "Where the Ruy López squeezes for thirty moves, the Scotch resolves the centre immediately and gets everyone into open play. Far less theory, and much easier to understand.",
+  "steps": [
+    {
+      "tag": "The board",
+      "title": "The opposite temperament",
+      "body": [
+        "The Ruy López keeps the tension as long as possible. The Scotch does the reverse: it trades in the centre on move three and plays with free pieces and open lines.",
+        "If you don't enjoy manoeuvring behind a locked pawn chain, this is your opening."
+      ]
+    },
+    {
+      "san": "e4",
+      "tag": "The centre",
+      "title": "The usual start",
+      "body": [
+        "Nothing new yet — the game is identical to the Italian and the Ruy for two moves."
+      ]
+    },
+    {
+      "san": "e5",
+      "tag": "The centre",
+      "title": "Symmetry",
+      "body": [
+        "Black mirrors."
+      ]
+    },
+    {
+      "san": "Nf3",
+      "tag": "Development",
+      "title": "Develop and attack",
+      "body": [
+        "The knight hits e5."
+      ]
+    },
+    {
+      "san": "Nc6",
+      "tag": "Development",
+      "title": "Defend and develop",
+      "body": [
+        "The natural answer."
+      ]
+    },
+    {
+      "san": "d4",
+      "tag": "The break",
+      "title": "Strike at once",
+      "body": [
+        "This is the Scotch. White challenges e5 a second time, and Black cannot defend it again — the pawn must capture or be lost.",
+        "Two pawns hitting the same square is the standard way to force matters in the centre."
+      ]
+    },
+    {
+      "san": "exd4",
+      "tag": "The trade",
+      "title": "Black takes",
+      "body": [
+        "Forced, in effect. The alternatives all concede more than the pawn is worth."
+      ]
+    },
+    {
+      "san": "Nxd4",
+      "tag": "Recapture",
+      "title": "The centre resolves",
+      "body": [
+        "White regains the pawn with a beautifully placed knight, and the e-file is now half-open for the rook that will come to e1. Compare the Ruy: there, this tension lasts for ages. Here it lasted one move."
+      ]
+    },
+    {
+      "san": "Bc5",
+      "tag": "Counterplay",
+      "title": "Question the knight",
+      "body": [
+        "Black develops with a threat, attacking the d4 knight. The knight is White's best piece, so this is the most testing reply."
+      ]
+    },
+    {
+      "san": "Be3",
+      "tag": "Support",
+      "title": "Defend it, and offer a trade",
+      "body": [
+        "The bishop defends the knight and lines up against its counterpart on c5. If Black takes, White recaptures toward the centre — which is usually the right direction."
+      ]
+    },
+    {
+      "san": "Qf6",
+      "tag": "Pressure",
+      "title": "Bring the heavy piece to bear",
+      "body": [
+        "Unusual by normal opening rules — the queen comes out early — but it's the main line, because d4 needs a third attacker and there is nothing to chase her with."
+      ]
+    },
+    {
+      "san": "c3",
+      "tag": "Preparation",
+      "title": "Prop it up again",
+      "body": [
+        "Another defender for the knight, and a useful square-grab in the centre. The little pawn moves are doing most of the work in this opening."
+      ]
+    },
+    {
+      "san": "Nge7",
+      "tag": "Development",
+      "title": "Behind the queen",
+      "body": [
+        "Black's knight develops to the only sensible square, since f6 is occupied by his own queen. That awkwardness is the price of bringing her out early.",
+        "The position is balanced and open. Both sides castle next and the middlegame starts almost immediately — <b>no memorised traps required</b>."
+      ]
+    }
+  ]
+}

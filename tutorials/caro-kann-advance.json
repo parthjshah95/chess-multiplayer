@@ -1,0 +1,115 @@
+{
+  "startFen": null,
+  "slug": "caro-kann-advance",
+  "title": "The Caro-Kann Advance",
+  "eyebrow": "Opening study · vs the Caro-Kann",
+  "standfirst": "The Caro-Kann is the French with the bad bishop problem solved. Same plans for White, one important difference — and the difference is the whole reason people play it.",
+  "steps": [
+    {
+      "tag": "The board",
+      "title": "The French, fixed",
+      "body": [
+        "In the French, Black plays 1…e6 to support …d5 and buries the c8 bishop behind it. The Caro-Kann supports …d5 with the <b>c-pawn</b> instead, leaving the bishop's diagonal open.",
+        "One pawn on a different square. Everything else about the structure is the same."
+      ]
+    },
+    {
+      "san": "e4",
+      "tag": "The centre",
+      "title": "The usual start",
+      "body": [
+        "The pawn goes to e4."
+      ]
+    },
+    {
+      "san": "c6",
+      "tag": "The Caro-Kann",
+      "title": "Support d5 without blocking anything",
+      "body": [
+        "The move that defines the opening. It prepares …d5 exactly as …e6 does in the French — but the c8 bishop still has somewhere to go."
+      ]
+    },
+    {
+      "san": "d4",
+      "tag": "The centre",
+      "title": "Take the whole thing",
+      "body": [
+        "As in the French."
+      ]
+    },
+    {
+      "san": "d5",
+      "tag": "The challenge",
+      "title": "The confrontation",
+      "body": [
+        "And as in the French, White must now decide."
+      ]
+    },
+    {
+      "san": "e5",
+      "tag": "The idea",
+      "title": "Advance — same plan as against the French",
+      "body": [
+        "Space, locked centre, play on the wings. If you already know the French Advance you know White's plan here: hold d4, gain kingside space, attack."
+      ]
+    },
+    {
+      "san": "Bf5",
+      "tag": "The difference",
+      "title": "Out first — this is the entire point",
+      "body": [
+        "Here it is. In the French, this bishop spends the game staring at its own pawn. In the Caro-Kann it steps outside <b>before</b> the e-pawn boxes it in.",
+        "This is why some players prefer the Caro-Kann to the French despite the extra tempo it costs. One good bishop is worth a move."
+      ]
+    },
+    {
+      "san": "Nf3",
+      "tag": "Development",
+      "title": "Develop and prepare",
+      "body": [
+        "White gets on with it, heading for a kingside build-up."
+      ]
+    },
+    {
+      "san": "e6",
+      "tag": "Solidity",
+      "title": "Now the pawn can go there safely",
+      "body": [
+        "Only <b>after</b> the bishop is out. Same pawn, same square, completely different position — the order is the whole idea."
+      ]
+    },
+    {
+      "san": "Be2",
+      "tag": "Development",
+      "title": "Quiet and flexible",
+      "body": [
+        "White develops modestly, keeping options open."
+      ]
+    },
+    {
+      "san": "c5",
+      "tag": "Counterplay",
+      "title": "The familiar lever",
+      "body": [
+        "The same plan as the French: attack the base of the d4–e5 chain. Black's counterplay is identical here — it's only his pieces that are better placed."
+      ]
+    },
+    {
+      "san": "Be3",
+      "tag": "Support",
+      "title": "Hold the base with a piece",
+      "body": [
+        "Another way to defend d4, developing at the same time."
+      ]
+    },
+    {
+      "san": "Nd7",
+      "tag": "The tabiya",
+      "title": "Same battle, better bishop",
+      "body": [
+        "The structures are the same as the French Advance; put the two final positions side by side and the only real difference is where Black's light-squared bishop lives.",
+        "That difference decides the game. <b>Learn structures, not move orders</b> — you now understand two openings for the price of one."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "startFen": null,
+  "slug": "slav-defence",
+  "title": "The Slav Defence",
+  "eyebrow": "Opening study · vs 1.d4",
+  "standfirst": "If the Queen's Gambit Declined bothers you because of that bishop on c8, the Slav is the answer — and the parallel with the Caro-Kann is exact.",
+  "steps": [
+    {
+      "tag": "The board",
+      "title": "The same fix, a different opening",
+      "body": [
+        "In the Queen's Gambit Declined, Black supports d5 with …e6 and shuts in the light-squared bishop. The Slav supports it with the <b>c-pawn</b> instead.",
+        "If that sounds familiar, it should — it's precisely what the Caro-Kann does against 1.e4. The same idea travels."
+      ]
+    },
+    {
+      "san": "d4",
+      "tag": "The centre",
+      "title": "The queen's pawn opening",
+      "body": [
+        "As before."
+      ]
+    },
+    {
+      "san": "d5",
+      "tag": "The centre",
+      "title": "Mirror it",
+      "body": [
+        "As before."
+      ]
+    },
+    {
+      "san": "c4",
+      "tag": "The gambit",
+      "title": "The offer",
+      "body": [
+        "White attacks d5 from the side."
+      ]
+    },
+    {
+      "san": "c6",
+      "tag": "The Slav",
+      "title": "Support d5, keep the bishop free",
+      "body": [
+        "The defining move. It does the same job as …e6 in the QGD — hold d5 with a pawn — but leaves the c8–h3 diagonal open for the bishop."
+      ]
+    },
+    {
+      "san": "Nf3",
+      "tag": "Development",
+      "title": "Natural development",
+      "body": [
+        "White develops and stops …e5 in one move."
+      ]
+    },
+    {
+      "san": "Nf6",
+      "tag": "Development",
+      "title": "Guard the centre",
+      "body": [
+        "Black's most natural developing move, adding a defender to d5."
+      ]
+    },
+    {
+      "san": "Nc3",
+      "tag": "Development",
+      "title": "Pile on d5",
+      "body": [
+        "Both sides continue to argue about the same square."
+      ]
+    },
+    {
+      "san": "dxc4",
+      "tag": "The point",
+      "title": "Now taking actually works",
+      "body": [
+        "In the QGD, grabbing this pawn is bad because White regains it with a big centre. Here it's the main line — because Black has …b5 available to <b>hold</b> the pawn, thanks to the c6 pawn supporting it.",
+        "The same little pawn move that freed the bishop also makes the capture playable. One move, two jobs."
+      ]
+    },
+    {
+      "san": "a4",
+      "tag": "Prevention",
+      "title": "Stop the pawn being held",
+      "body": [
+        "White's answer: take b5 away before it happens. He'll regain the c4 pawn next.",
+        "The cost is that a4 permanently weakens b4 — a square Black's pieces will use later. Almost every move in a good opening is a trade like this."
+      ]
+    },
+    {
+      "san": "Bf5",
+      "tag": "The payoff",
+      "title": "Out, before anything blocks it",
+      "body": [
+        "There's the bishop, on the diagonal the QGD never gives it. This is what the whole system was for."
+      ]
+    },
+    {
+      "san": "e3",
+      "tag": "Solidity",
+      "title": "Solid, and now harmless",
+      "body": [
+        "White shuts in his own dark-squared bishop, but as in the QGD it will find a path. Both sides are simply completing development."
+      ]
+    },
+    {
+      "san": "e6",
+      "tag": "The tabiya",
+      "title": "Now the pawn goes there, second",
+      "body": [
+        "The exact Caro-Kann trick: the pawn only comes to e6 <b>after</b> the bishop has left. Compare this position to the Queen's Gambit Declined — same structure, better bishop.",
+        "White will play Bxc4 and castle with a small space advantage. Black is solid, has no bad pieces, and knows exactly what he's playing for."
+      ]
+    }
+  ]
+}

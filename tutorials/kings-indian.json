@@ -1,0 +1,115 @@
+{
+  "startFen": null,
+  "slug": "kings-indian",
+  "title": "The King's Indian Defence",
+  "eyebrow": "Opening study · vs 1.d4",
+  "standfirst": "Every principle you've learned so far says don't let your opponent take the whole centre. The King's Indian breaks that rule deliberately — and it works.",
+  "steps": [
+    {
+      "tag": "The board",
+      "title": "Breaking the rule on purpose",
+      "body": [
+        "So far the message has been simple: fight for the centre. The King's Indian lets White build the biggest centre he likes, then attacks it with pieces from a distance.",
+        "This is a <b>hypermodern</b> opening. The rule isn't wrong — it's that a big centre is also a big target."
+      ]
+    },
+    {
+      "san": "d4",
+      "tag": "The centre",
+      "title": "The queen's pawn opening",
+      "body": [
+        "White starts as usual."
+      ]
+    },
+    {
+      "san": "Nf6",
+      "tag": "Development",
+      "title": "Control d5 with a piece",
+      "body": [
+        "Not …d5. Black stops White's e-pawn from advancing using a <b>piece</b> rather than a pawn — the hypermodern idea in a single move."
+      ]
+    },
+    {
+      "san": "c4",
+      "tag": "Space",
+      "title": "Take more",
+      "body": [
+        "White grabs a second big centre pawn. Black is going to let him."
+      ]
+    },
+    {
+      "san": "g6",
+      "tag": "The setup",
+      "title": "Preparing the fianchetto",
+      "body": [
+        "The little pawn move that names the system. It clears g7 for the bishop, which will spend the game on the long diagonal aimed at White's centre."
+      ]
+    },
+    {
+      "san": "Nc3",
+      "tag": "Development",
+      "title": "Natural development",
+      "body": [
+        "White builds calmly, controlling d5 and e4."
+      ]
+    },
+    {
+      "san": "Bg7",
+      "tag": "The idea",
+      "title": "The fianchettoed bishop",
+      "body": [
+        "There it is, on the a1–h8 diagonal, pointing at <b>d4 and beyond</b>. It may be blocked for twenty moves — and then the centre opens and it becomes the strongest piece on the board."
+      ]
+    },
+    {
+      "san": "e4",
+      "tag": "Space",
+      "title": "The full centre, accepted",
+      "body": [
+        "White now has pawns on c4, d4 and e4 — everything the earlier studies said to aim for. By classical standards White is simply better.",
+        "The King's Indian player is entirely content. A big centre must be <b>defended</b>, and it can be attacked."
+      ]
+    },
+    {
+      "san": "d6",
+      "tag": "Restraint",
+      "title": "A small move with a big future",
+      "body": [
+        "Modest, but it does two things: it stops e4–e5 from steamrolling the position, and it prepares the pawn break that this whole opening exists for."
+      ]
+    },
+    {
+      "san": "Nf3",
+      "tag": "Development",
+      "title": "Solid development",
+      "body": [
+        "White develops naturally and guards e5."
+      ]
+    },
+    {
+      "san": "O-O",
+      "tag": "King safety",
+      "title": "Castle first, fight later",
+      "body": [
+        "Black tucks the king away behind the fianchetto — a famously safe structure — before starting anything. Even in sharp openings, king safety comes first."
+      ]
+    },
+    {
+      "san": "Be2",
+      "tag": "Development",
+      "title": "The Classical setup",
+      "body": [
+        "White completes his development modestly, ready to castle. Everything is about to become concrete."
+      ]
+    },
+    {
+      "san": "e5",
+      "tag": "The break",
+      "title": "The strike the whole opening was built for",
+      "body": [
+        "Here it is. Black finally hits the centre, and every earlier move now makes sense: …d6 supported this pawn, …Bg7 and …Nf6 are already aimed at the squares that open up.",
+        "White usually plays d4–d5, locking the centre. Then the game becomes a famous race: Black storms the kingside with …f5, …f4 and …g5, White breaks through on the queenside with c4–c5. <b>Whoever gets there first wins</b> — which is exactly why people love this opening."
+      ]
+    }
+  ]
+}

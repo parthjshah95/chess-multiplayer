@@ -1,0 +1,115 @@
+{
+  "startFen": null,
+  "slug": "london-system",
+  "title": "The London System",
+  "eyebrow": "Opening study · a system",
+  "standfirst": "Every opening so far has been a conversation — you play, they reply, the line branches. The London barely branches at all, which is exactly why it has taken over club chess.",
+  "steps": [
+    {
+      "tag": "The board",
+      "title": "A system, not a line",
+      "body": [
+        "Most openings are dialogues: each of your moves depends on their last one. A <b>system</b> is different — you aim for the same setup almost regardless of what your opponent does.",
+        "That means far less to remember. The trade-off is that you're not trying to punish anything specific; you're just getting a good position, every time."
+      ]
+    },
+    {
+      "san": "d4",
+      "tag": "The centre",
+      "title": "The queen's pawn opening",
+      "body": [
+        "The London always begins here."
+      ]
+    },
+    {
+      "san": "d5",
+      "tag": "The centre",
+      "title": "A standard reply",
+      "body": [
+        "Black plays the most natural move. The London would look much the same against 1…Nf6 or 1…e6."
+      ]
+    },
+    {
+      "san": "Nf3",
+      "tag": "Development",
+      "title": "Part of the setup",
+      "body": [
+        "Knight to f3 is one of the five London moves. It happens nearly every game."
+      ]
+    },
+    {
+      "san": "Nf6",
+      "tag": "Development",
+      "title": "Natural",
+      "body": [
+        "Black develops."
+      ]
+    },
+    {
+      "san": "Bf4",
+      "tag": "The idea",
+      "title": "Out before the pawn — this is the London",
+      "body": [
+        "The move the system is named for. Compare the Queen's Gambit Declined, where White plays e3 and only <i>then</i> tries to solve the c1 bishop.",
+        "<b>The bishop leaves the house before the door is shut.</b> It's the same principle the Caro-Kann and Slav use for Black — get the bishop out before your own pawn traps it."
+      ]
+    },
+    {
+      "san": "e6",
+      "tag": "Development",
+      "title": "Solid and standard",
+      "body": [
+        "Black shuts in his own light-squared bishop, which the London player is quite happy to see."
+      ]
+    },
+    {
+      "san": "e3",
+      "tag": "Solidity",
+      "title": "Now the pawn, safely",
+      "body": [
+        "Supporting d4 and opening the f1 bishop. This move would have been careless three moves ago; it's perfectly fine now that the dark-squared bishop is outside."
+      ]
+    },
+    {
+      "san": "c5",
+      "tag": "Counterplay",
+      "title": "The standard lever",
+      "body": [
+        "Black hits the base of White's little centre — the same idea as …c5 in the French. Good players play this against the London almost automatically."
+      ]
+    },
+    {
+      "san": "c3",
+      "tag": "Support",
+      "title": "Hold everything together",
+      "body": [
+        "A modest pawn that props up d4 and completes the London's pawn triangle: <b>d4, e3, c3</b>. Solid, unambitious, and very hard to break down."
+      ]
+    },
+    {
+      "san": "Nc6",
+      "tag": "Development",
+      "title": "Pressure the centre",
+      "body": [
+        "Black adds another attacker to d4."
+      ]
+    },
+    {
+      "san": "Nbd2",
+      "tag": "Development",
+      "title": "The last piece takes its square",
+      "body": [
+        "Not c3, which is occupied by White's own pawn — the knight goes behind the pawns instead, heading for e5 or c4 later."
+      ]
+    },
+    {
+      "san": "Bd6",
+      "tag": "The tabiya",
+      "title": "The complete London setup",
+      "body": [
+        "There is the system: pawns on c3, d4 and e3, knights on f3 and d2, bishop on f4, and the king about to castle. You will reach this position again and again.",
+        "Black challenges the London bishop, which usually retreats to g3. White's plan is <b>Ne5</b>, supported by the knight on d2, followed by a kingside build-up. Learn one plan, play it forever."
+      ]
+    }
+  ]
+}

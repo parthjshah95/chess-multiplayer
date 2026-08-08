@@ -1,0 +1,115 @@
+{
+  "startFen": null,
+  "slug": "french-advance",
+  "title": "The French Advance",
+  "eyebrow": "Opening study · vs the French",
+  "standfirst": "The French Defence hands Black a solid position and one long-term problem. The Advance Variation takes space and makes that problem permanent — read this one alongside the Caro-Kann study.",
+  "steps": [
+    {
+      "tag": "The board",
+      "title": "One structure, two openings",
+      "body": [
+        "The French and the Caro-Kann reach almost the same pawn structure by different routes. The difference is one bishop, and it decides how both games are played.",
+        "Play this study, then play the Caro-Kann Advance. The contrast is the lesson."
+      ]
+    },
+    {
+      "san": "e4",
+      "tag": "The centre",
+      "title": "The usual start",
+      "body": [
+        "The pawn goes to e4."
+      ]
+    },
+    {
+      "san": "e6",
+      "tag": "The French",
+      "title": "Solid, and slightly self-blocking",
+      "body": [
+        "Black prepares …d5 with support. It's tough and reliable — but notice which piece the e6 pawn has just shut in: the <b>light-squared bishop on c8</b>. Keep watching it."
+      ]
+    },
+    {
+      "san": "d4",
+      "tag": "The centre",
+      "title": "Take the whole thing",
+      "body": [
+        "White happily builds the ideal centre while Black prepares."
+      ]
+    },
+    {
+      "san": "d5",
+      "tag": "The challenge",
+      "title": "The confrontation",
+      "body": [
+        "Now White must decide: trade, defend, or push."
+      ]
+    },
+    {
+      "san": "e5",
+      "tag": "The idea",
+      "title": "Advance — grab space and close the door",
+      "body": [
+        "The pawn goes past rather than trading. The centre locks, White owns more space, and the c8 bishop is now sealed behind its own pawns with <b>no way out</b>.",
+        "Locked centre means play happens on the wings. White will play for a kingside attack; Black must counter on the queenside."
+      ]
+    },
+    {
+      "san": "c5",
+      "tag": "Counterplay",
+      "title": "Attack the base of the chain",
+      "body": [
+        "The standard rule for a locked pawn chain: <b>attack it at the base</b>. White's chain is d4–e5, so d4 is the target and …c5 is how Black hits it. This move is almost automatic in the French."
+      ]
+    },
+    {
+      "san": "c3",
+      "tag": "Support",
+      "title": "Prop up the base",
+      "body": [
+        "The obvious answer — hold d4 with a pawn rather than a piece, keeping the chain intact."
+      ]
+    },
+    {
+      "san": "Nc6",
+      "tag": "Pressure",
+      "title": "Another attacker on d4",
+      "body": [
+        "Black keeps piling up on the one square that matters."
+      ]
+    },
+    {
+      "san": "Nf3",
+      "tag": "Development",
+      "title": "Another defender",
+      "body": [
+        "White develops and defends in the same move. The little battle over d4 is the whole opening."
+      ]
+    },
+    {
+      "san": "Qb6",
+      "tag": "Pressure",
+      "title": "The queen joins the pile",
+      "body": [
+        "A third attacker on d4, and awkward to meet: the natural developing move Bd3 no longer defends it. The French player's queen almost always ends up here."
+      ]
+    },
+    {
+      "san": "Be2",
+      "tag": "Restraint",
+      "title": "The modest square, on purpose",
+      "body": [
+        "Not the aggressive d3, because that square is now unavailable — the bishop keeps d4 defended by staying humble. Understanding <i>why</i> beats memorising <i>where</i>."
+      ]
+    },
+    {
+      "san": "cxd4",
+      "tag": "The tabiya",
+      "title": "The battle lines are drawn",
+      "body": [
+        "The structure is set. White will castle, hold d4, and build toward a kingside attack with the extra space; Black will keep hammering the queenside.",
+        "And that bishop on c8 is <b>still</b> looking at its own pawn on e6. In the Caro-Kann study, watch what Black does differently on move two."
+      ]
+    }
+  ]
+}

@@ -18,6 +18,7 @@
 
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { extname, join } from "node:path";
 import { chromium } from "playwright";
 
@@ -44,21 +45,31 @@ const browser = await chromium.launch(
   process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {},
 );
 
-const PAGES = [
-  ["index", "/learn.html", () => document.querySelectorAll("#cards .board").length > 0],
-  ["tutorial", "/tutorial.html?t=italian-game", () => !document.getElementById("study").hidden],
-];
-const VIEWPORTS = [["desktop", 1200, 1000], ["mobile ", 390, 844]];
+// Every published study gets checked, not just one — a study is data, and bad
+// data renders a broken page that node test.js cannot see.
+const studies = JSON.parse(readFileSync(new URL("../tutorials/index.json", import.meta.url), "utf8"));
+const studyPage = (slug) => [slug, `/tutorial.html?t=${slug}`,
+  () => !document.getElementById("study").hidden, null];
 
-for (const [size, width, height] of VIEWPORTS) {
-for (const [name, path, ready] of PAGES) {
-  const label = `${size} ${name.padEnd(8)}`;
+// Wait for *every* card, so the board assertions below cover all of them.
+const INDEX_PAGE = ["index", "/learn.html",
+  (n) => document.querySelectorAll("#cards .board").length >= n, studies.length];
+// Desktop sweeps everything; mobile spot-checks the index and one study, since
+// the responsive rules are shared and re-testing all ten adds no coverage.
+const VIEWPORTS = [
+  ["desktop", 1200, 1000, [INDEX_PAGE, ...studies.map((s) => studyPage(s.slug))]],
+  ["mobile ", 390, 844, [INDEX_PAGE, studyPage(studies[0].slug)]],
+];
+
+for (const [size, width, height, pages] of VIEWPORTS) {
+for (const [name, path, ready, arg] of pages) {
+  const label = `${size} ${name.padEnd(22)}`;
   const ctx = await browser.newContext({ viewport: { width, height } });
   const page = await ctx.newPage();
   const errors = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto(`http://localhost:${PORT}${path}`);
-  await page.waitForFunction(ready, null, { timeout: 15000 }).catch(() => {});
+  await page.waitForFunction(ready, arg ?? null, { timeout: 15000 }).catch(() => {});
   await page.evaluate(() => document.fonts.ready); // glyph metrics settle first
 
   ok(`${label} no JS errors`, errors.length === 0, errors.slice(0, 2).join(" | "));

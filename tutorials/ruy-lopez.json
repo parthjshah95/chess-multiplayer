@@ -1,0 +1,133 @@
+{
+  "startFen": null,
+  "slug": "ruy-lopez",
+  "title": "The Ruy López",
+  "eyebrow": "Opening study · the Spanish",
+  "standfirst": "Named for a Spanish priest who wrote it down in 1561 and still the main battleground of 1.e4 e5. Nothing here happens fast — that's the point.",
+  "steps": [
+    {
+      "tag": "The board",
+      "title": "Pressure, not threats",
+      "body": [
+        "The Italian aims a bishop at f7 and asks a direct question. The Ruy López asks a slower one: it attacks the <b>defender</b> of Black's centre and then does nothing about it for ten moves.",
+        "Grandmasters call the resulting squeeze “Spanish torture”. Watch how little actually happens, and how uncomfortable it becomes anyway."
+      ]
+    },
+    {
+      "san": "e4",
+      "tag": "The centre",
+      "title": "The usual first move",
+      "body": [
+        "Same start as the Italian — a pawn to the centre, two pieces freed behind it."
+      ]
+    },
+    {
+      "san": "e5",
+      "tag": "The centre",
+      "title": "Black claims his share",
+      "body": [
+        "Symmetry again. Everything that follows is about who gets to break it first."
+      ]
+    },
+    {
+      "san": "Nf3",
+      "tag": "Development",
+      "title": "Develop with a question",
+      "body": [
+        "The knight develops and attacks e5. Black must answer it before doing anything else."
+      ]
+    },
+    {
+      "san": "Nc6",
+      "tag": "Development",
+      "title": "The natural defender",
+      "body": [
+        "The knight defends e5 and develops. Note <b>what</b> is holding Black's centre together — it's this piece, and White's next move is about it."
+      ]
+    },
+    {
+      "san": "Bb5",
+      "tag": "The idea",
+      "title": "Attack the defender, not the pawn",
+      "body": [
+        "This is the Ruy López. The bishop doesn't attack e5 — it attacks the knight that <b>defends</b> e5. Remove or distract that knight and the pawn falls.",
+        "It looks like a pin, and beginners often assume e5 is already hanging. It isn't yet: 4.Bxc6 dxc6 5.Nxe5 Qd4 wins the piece back. The pressure is real but indirect."
+      ]
+    },
+    {
+      "san": "a6",
+      "tag": "The question",
+      "title": "The Morphy Defence",
+      "body": [
+        "Black asks the bishop to decide: retreat, or take on c6 and give up the bishop pair. Named for Paul Morphy, and played in the overwhelming majority of games.",
+        "Asking a question costs a tempo. It's worth it because it forces White to commit."
+      ]
+    },
+    {
+      "san": "Ba4",
+      "tag": "The answer",
+      "title": "Keep the bishop, keep the tension",
+      "body": [
+        "White declines to trade. The bishop stays on the a4–e8 diagonal, still eyeing c6 from a distance, and the threat to win e5 is still notional rather than immediate."
+      ]
+    },
+    {
+      "san": "Nf6",
+      "tag": "Counterplay",
+      "title": "Hit something back",
+      "body": [
+        "Black develops the last kingside knight and attacks e4. Every developing move should carry a question if it can."
+      ]
+    },
+    {
+      "san": "O-O",
+      "tag": "King safety",
+      "title": "Castling into a “hanging” pawn",
+      "body": [
+        "White ignores the attack on e4 and castles. If 5…Nxe4 6.d4 hits the knight and reopens everything, and Black's extra pawn is temporary.",
+        "<b>Development beats material in the first ten moves.</b> That's the whole justification for this move."
+      ]
+    },
+    {
+      "san": "Be7",
+      "tag": "Solidity",
+      "title": "The quiet square",
+      "body": [
+        "Not to c5, where the Italian bishop goes — here it just guards the knight and clears the way to castle. Modest moves are normal in the Ruy."
+      ]
+    },
+    {
+      "san": "Re1",
+      "tag": "Preparation",
+      "title": "Now e4 is properly defended",
+      "body": [
+        "The rook backs up the e-pawn, and the earlier bluff becomes a genuine threat: Bxc6 followed by Nxe5 is suddenly real."
+      ]
+    },
+    {
+      "san": "b5",
+      "tag": "Space",
+      "title": "Shutting the door",
+      "body": [
+        "Black finally kicks the bishop off the dangerous diagonal, gaining queenside space in the process. It also loosens Black's own pawns — every gain of space costs something."
+      ]
+    },
+    {
+      "san": "Bb3",
+      "tag": "The long game",
+      "title": "The bishop finds its home",
+      "body": [
+        "It looks like a retreat but the bishop now stares at <b>f7</b> along a diagonal that will matter for the rest of the game. It often sits here for twenty moves."
+      ]
+    },
+    {
+      "san": "d6",
+      "tag": "The tabiya",
+      "title": "The Closed Ruy López",
+      "body": [
+        "Black shores up e5 and opens the c8 bishop. This position has been reached in tens of thousands of master games — it's a starting point, not an ending.",
+        "White's long-term plan is c3 and d4 to build the big centre, then the knight tour <b>Nbd2–f1–g3</b>. Black plays for …Na5 hitting the b3 bishop, or …Bg4 pinning the f3 knight. Nobody is attacking anybody yet."
+      ]
+    }
+  ]
+}

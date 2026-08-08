@@ -1,0 +1,115 @@
+{
+  "startFen": null,
+  "slug": "sicilian-alapin",
+  "title": "Beating the Sicilian: the Alapin",
+  "eyebrow": "Opening study · anti-Sicilian",
+  "standfirst": "Half your opponents will meet 1.e4 with 1…c5. You can spend years learning the Open Sicilian, or you can play 2.c3 and get a good game with one idea.",
+  "steps": [
+    {
+      "tag": "The board",
+      "title": "The problem with the Sicilian",
+      "body": [
+        "1…c5 fights for the centre without blocking anything, and the main lines run twenty-five moves deep in places. That's a lot to learn for a move your opponent plays automatically.",
+        "The Alapin's whole idea fits in one sentence: <b>build the big centre anyway</b>."
+      ]
+    },
+    {
+      "san": "e4",
+      "tag": "The centre",
+      "title": "The usual start",
+      "body": [
+        "The pawn goes to e4."
+      ]
+    },
+    {
+      "san": "c5",
+      "tag": "The Sicilian",
+      "title": "An asymmetrical fight",
+      "body": [
+        "Black stakes a claim on d4 from the side rather than mirroring. He doesn't get equal central space, but he gets the half-open c-file and unbalanced play — which is exactly what a Sicilian player is after."
+      ]
+    },
+    {
+      "san": "c3",
+      "tag": "The idea",
+      "title": "Preparing d4 the slow way",
+      "body": [
+        "The Alapin. White intends d2–d4, and c3 will be there to recapture, giving him the broad pawn centre the Sicilian is designed to prevent.",
+        "The cost is real: c3 takes the natural square from the b1 knight. That's the trade — a slightly awkward knight for a big centre and almost no theory."
+      ]
+    },
+    {
+      "san": "d5",
+      "tag": "The test",
+      "title": "Black strikes first",
+      "body": [
+        "The critical reply, and the one you'll face most. Instead of allowing d4, Black hits e4 immediately while White's queenside knight has nowhere good to go."
+      ]
+    },
+    {
+      "san": "exd5",
+      "tag": "The trade",
+      "title": "Take",
+      "body": [
+        "Nothing better — and this is the point of the next move."
+      ]
+    },
+    {
+      "san": "Qxd5",
+      "tag": "Recapture",
+      "title": "The queen comes out too early",
+      "body": [
+        "Black must recapture with the queen; …Nf6 costs a pawn for insufficient play. But an early queen is a target, and White's next move exploits exactly that."
+      ]
+    },
+    {
+      "san": "d4",
+      "tag": "The payoff",
+      "title": "The big centre arrives",
+      "body": [
+        "There it is. White has the centre he wanted, c3 supports it, and — crucially — every piece White develops from here comes out <b>hitting the black queen</b>."
+      ]
+    },
+    {
+      "san": "Nf6",
+      "tag": "Development",
+      "title": "Get the pieces out",
+      "body": [
+        "Black sensibly develops rather than grabbing anything. The queen will have to move again soon."
+      ]
+    },
+    {
+      "san": "Nf3",
+      "tag": "Development",
+      "title": "Natural and useful",
+      "body": [
+        "Developing toward the centre and guarding d4. Notice how easy White's moves are to find — that's the appeal of this system."
+      ]
+    },
+    {
+      "san": "e6",
+      "tag": "Solidity",
+      "title": "Open the bishop",
+      "body": [
+        "Black prepares to develop the dark-squared bishop and castle. Solid and unhurried."
+      ]
+    },
+    {
+      "san": "Be2",
+      "tag": "Development",
+      "title": "Modest, then castle",
+      "body": [
+        "The bishop takes a quiet square rather than an ambitious one. There is no rush: White's structure is better and the game is long."
+      ]
+    },
+    {
+      "san": "Nc6",
+      "tag": "The tabiya",
+      "title": "A comfortable game with no memorisation",
+      "body": [
+        "White castles next and has a pleasant position: more central space and easy development, against a Sicilian player who never got the Sicilian.",
+        "The plan from here is simple — finish developing, and consider <b>d4–d5</b> at the right moment to open the position while you're better placed for it."
+      ]
+    }
+  ]
+}
