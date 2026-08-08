@@ -1,11 +1,31 @@
 # Chess with a Friend
 
-Two-player correspondence chess. Copy a link, send it to a friend, play. Games
-are saved server-side, so either player can close the tab and come back. There
-are also opening tutorials, rendered from JSON.
+Online chess with no accounts: open the app, share the link, play. Live game
+state lives in Vercel Blob; every finished game is archived to Postgres for later
+analysis (see [`db/README.md`](db/README.md)). There are also opening tutorials,
+rendered from JSON.
 
 No build step, no framework, no bundler. Vanilla ES modules and plain CSS,
-served as static files by Vercel, with one serverless function for game state.
+served as static files, with one serverless function for game state.
+
+## Deployment — `main` is production
+
+**The `main` branch is the deployed state. Ship only by merging to `main`.**
+
+This project is connected to Vercel with Git auto-deploy: every push/merge to
+`main` builds and promotes to production automatically. That protects one
+guarantee worth keeping — **whatever is in `main` is exactly what's live.**
+
+- **Do:** open a PR and merge it to `main`. The merge *is* the deploy.
+- **Don't:** run `vercel --prod` (or any local/CLI deploy) to publish to
+  production. A local deploy ships code that isn't in `main`, silently breaks the
+  "main == production" promise, and overwrites whatever the last `main` deploy
+  put live — including work from another branch or another person's session.
+
+`vercel dev` (local dev server) and preview deployments from PR branches are
+fine — they don't touch production. The rule is only about publishing to prod.
+
+## Layout
 
 ```
 index.html    app.js       the live game
@@ -21,7 +41,7 @@ shared.css     design tokens + page shell + board   (every page imports this)
 game.css       chrome only the game uses
 learn.css      chrome only the tutorial pages use
 
-api/game.js    the only endpoint: create / join / name / move / resign / rematch
+api/game.js     the only endpoint: create / join / name / move / resign / rematch
 api/recorder.js archives finished games to Postgres (best-effort, never blocks)
 tutorials/*.json  tutorial content
 db/            schema and setup notes
@@ -71,6 +91,10 @@ passes its state, a tutorial passes a position and a last move. That is what
 makes it reusable — the moment a shared component reaches for a module-level
 variable, it belongs to one caller again.
 
+Corollary: a feature that genuinely is game-only — the capture-flight animation,
+say — stays in `app.js` and drives the shared parts through their arguments.
+Don't push game concepts down into `board.js` to avoid a little wiring.
+
 ### 4. Colours are tokens. Literals go in `:root` and nowhere else.
 
 Every colour lives in `shared.css`'s `:root` block. The same piece fill was once
@@ -115,7 +139,7 @@ not divide by 8 distribute the remainder across tracks, and that is not a bug.
 
 Playwright is deliberately **not** in `package.json` — it would install on every
 Vercel build for no benefit. Install it locally when you want to run
-`checks/ui.mjs`.
+`checks/ui.mjs`, which `.vercelignore` also keeps out of the bundle.
 
 ### 9. Polling is the transport. Keep it cheap.
 
@@ -125,12 +149,13 @@ everyone. Idle polls now answer from the version in the blob pathname via
 `?since=`, without reading a body. Before adding anything that runs per poll,
 work out what it costs at two players × every few seconds.
 
-## Working on it
+## Develop
 
 ```bash
 npm install
-node test.js                              # unit tests + tutorial/schema validation
+node test.js                               # unit tests + tutorial/schema validation
 npm i -D playwright && node checks/ui.mjs  # rendered-geometry checks
+vercel dev                                 # static site + /api functions locally
 ```
 
 `app.js` is loaded as `app.js?v=N` — bump `N` in `index.html` when you change it,

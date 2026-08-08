@@ -28,6 +28,7 @@ const saveSeatKey = (id, key) => {
 const NAME_KEY = "chess-name";
 const loadName = () => localStorage.getItem(NAME_KEY) || "";
 const saveName = (n) => localStorage.setItem(NAME_KEY, n);
+const motionOK = () => !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 // ── state ───────────────────────────────────────────────────────────
 let state = null;          // latest server state (authoritative)
@@ -42,6 +43,7 @@ let resignArm = null;
 let posting = false;
 let pollTimer = null;
 let failStreak = 0;
+let flyingCapture = null; // a captured piece in flight to its drawer: { color, type, square, started }
 
 // ── server api ──────────────────────────────────────────────────────
 async function api(payload) {
@@ -142,6 +144,13 @@ function applyState(next) {
   for (const san of next.moves) chess.move(san);
   lastMove = next.lastMove;
 
+  // A capture just arrived → fly the taken piece to its drawer as we render.
+  // Skipped if one's already in flight or the viewer prefers reduced motion.
+  if (prev && next.moves.length > prev.moves.length && !flyingCapture && motionOK()) {
+    const played = chess.history({ verbose: true }).at(-1);
+    if (played?.captured) flyingCapture = { color: played.color === "w" ? "b" : "w", type: played.captured, square: played.to };
+  }
+
   const opponentMoved = prev && next.v > prev.v && next.moves.length > prev.moves.length && next.turn === you;
   if (opponentMoved) blip(next.lastMove?.captured ? 220 : 440);
   // The board came round to you: they moved, or the game just started (or a
@@ -185,6 +194,7 @@ function syncUi() {
   render();
   renderMoves();
   renderFallen();
+  flyCapture();
 }
 
 function updateStatus() {
@@ -296,10 +306,14 @@ async function makeMove(from, to, promotion) {
   catch { clearSelection(); render(); return; }
   clearSelection();
   lastMove = { from: mv.from, to: mv.to, captured: !!mv.captured };
+  if (mv.captured && !flyingCapture && motionOK()) {
+    flyingCapture = { color: mv.color === "w" ? "b" : "w", type: mv.captured, square: mv.to };
+  }
   blip(mv.captured ? 220 : 440);
   render();
   renderMoves();
   renderFallen();
+  flyCapture();
   setStatus("Waiting for your opponent", "");
   posting = true;
   try {
@@ -359,9 +373,60 @@ function render() {
 // flip: whoever is at the top of the board gets the top tray.
 function renderFallen() {
   const fallen = fallenPieces(chess);
+  // Hold a piece that's mid-flight out of its tray, so it lands in at the end of
+  // the animation instead of popping in when the flight starts.
+  if (flyingCapture) {
+    const list = fallen[flyingCapture.color];
+    const i = list.lastIndexOf(flyingCapture.type);
+    if (i !== -1) list.splice(i, 1);
+  }
   const flipped = you === "b";
   renderTray(fallenTopEl, flipped ? "w" : "b", fallen);
   renderTray(fallenBottomEl, flipped ? "b" : "w", fallen);
+}
+
+// A captured piece flies to the tray on its owner's side — mirroring the
+// top/bottom mapping renderFallen uses.
+function trayFor(color) {
+  const flipped = you === "b";
+  return color === (flipped ? "w" : "b") ? fallenTopEl : fallenBottomEl;
+}
+
+// Clone the just-captured piece and animate it from its square into the tray.
+// The tray piece itself is held back (see renderFallen) until this ghost lands.
+function flyCapture() {
+  if (!flyingCapture || flyingCapture.started) return;
+  const { color, type, square } = flyingCapture;
+  const cell = boardEl.querySelector(`[data-square="${square}"]`);
+  const tray = trayFor(color);
+  if (!cell || !tray) { flyingCapture = null; renderFallen(); return; }
+  flyingCapture.started = true;
+
+  const from = cell.getBoundingClientRect();
+  const to = tray.getBoundingClientRect();
+  const ghost = document.createElement("span");
+  ghost.className = `fallen ${color} flying`;
+  ghost.textContent = GLYPH[type] + TEXT;
+  ghost.style.left = `${from.left + from.width / 2}px`;
+  ghost.style.top = `${from.top + from.height / 2}px`;
+  document.body.appendChild(ghost);
+
+  const dx = (to.left + to.right) / 2 - (from.left + from.width / 2);
+  const dy = (to.top + to.bottom) / 2 - (from.top + from.height / 2);
+  requestAnimationFrame(() => {
+    ghost.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+  });
+
+  let landed = false;
+  const land = () => {
+    if (landed) return;
+    landed = true;
+    ghost.remove();
+    flyingCapture = null;
+    renderFallen(); // the piece now appears in the tray, as the ghost arrives
+  };
+  ghost.addEventListener("transitionend", land, { once: true });
+  setTimeout(land, 650); // fallback if transitionend never fires
 }
 
 function renderMoves() {

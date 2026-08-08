@@ -55,7 +55,11 @@ export function renderBoard(el, {
       cell.className = "square " + ((fileIdx + rankIdx) % 2 === 0 ? "dark" : "light");
       if (row === 7) cell.dataset.file = FILES[fileIdx];
       if (col === 0) cell.dataset.rank = String(rankIdx + 1);
-      if (lastMove && (sq === lastMove.from || sq === lastMove.to)) cell.classList.add("last");
+      // The square it left gets a soft tint, the square it landed on a bright
+      // ring — steady rather than a fleeting blink, so the last-moved piece is
+      // easy to find without being distracting.
+      if (lastMove && sq === lastMove.from) cell.classList.add("last");
+      if (lastMove && sq === lastMove.to) cell.classList.add("last-to");
       if (sq === selected) cell.classList.add("selected");
       if (sq === checkSquare) cell.classList.add("check");
       const hits = targets.filter((m) => m.to === sq);
